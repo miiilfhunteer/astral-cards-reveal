@@ -134,7 +134,7 @@ export const PersonalReading = () => {
             </h2>
             <div className="max-w-md mx-auto bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-8 border border-golden-400/30">
               <p className="text-purple-200 mb-6">
-                Стоимость персонального расклада: <span className="text-golden-400 text-xl font-medium">490₽</span>
+                Стоимость персонального расклада: <span className="text-golden-400 text-xl font-medium">400 грн.</span>
               </p>
               <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
                 Оплатить расклад

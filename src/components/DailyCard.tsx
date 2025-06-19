@@ -12,15 +12,35 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [step, setStep] = useState('initial'); // initial, preparing, revealing, revealed
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showCTA, setShowCTA] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Карта дня - Шут
-  const dailyCard = {
-    name: "Шут",
-    imageUrl: "https://static.tildacdn.com/tild6564-6365-4839-a538-366265396261/fool_with_label.jpg",
-    description: "Вот Твоя Карта Дня, это - Шут: эта карта символизирует новые начинания и спонтанные решения. Сегодня стоит довериться своей интуиции и сделать шаг в неизвестность, который может привести к удивительным открытиям."
-  };
+  // Карты дня - 3 карты для рандома
+  const dailyCards = [
+    {
+      name: "Шут",
+      imageUrl: "https://static.tildacdn.com/tild6564-6365-4839-a538-366265396261/fool_with_label.jpg",
+      title: "Вот Твоя Карта Дня, это - Шут",
+      description: "эта карта символизирует новые начинания и спонтанные решения. Сегодня стоит довериться своей интуиции и сделать шаг в неизвестность, который может привести к удивительным открытиям."
+    },
+    {
+      name: "Маг",
+      imageUrl: "https://static.tildacdn.com/tild3935-6134-4032-a534-396263366162/magician_with_label.jpg",
+      title: "Вот Твоя Карта Дня, это - Маг",
+      description: "карта творческой силы и проявления намерений. Сегодня у тебя есть все необходимые ресурсы, чтобы воплотить свои желания в реальность, просто сосредоточься на своей цели."
+    },
+    {
+      name: "Верховная Жрица",
+      imageUrl: "https://static.tildacdn.com/tild3131-3336-4339-b962-613862393633/high_priestess_with_.jpg",
+      title: "Вот Твоя Карта Дня, это - Верховная Жрица",
+      description: "карта интуиции и скрытых знаний. Сегодня обрати внимание на свой внутренний голос и тайные знаки вокруг, они могут открыть тебе важную истину."
+    }
+  ];
 
   useEffect(() => {
+    // Выбираем случайную карту при загрузке
+    const randomCard = dailyCards[Math.floor(Math.random() * dailyCards.length)];
+    setSelectedCard(randomCard);
+    
     // Автоматически начинаем процесс при загрузке компонента
     setStep('preparing');
     
@@ -73,6 +93,8 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
     );
   }
 
+  if (!selectedCard) return null;
+
   return (
     <div className="text-center">
       {/* Card Display */}
@@ -85,25 +107,22 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
           <div className={`relative w-full h-full transition-transform duration-1000 ${step === 'revealed' ? 'rotate-y-180' : ''}`} style={{ transformStyle: 'preserve-3d' }}>
             {/* Card Back */}
             <div 
-              className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl shadow-2xl border border-golden-400/30 flex items-center justify-center"
-              style={{ backfaceVisibility: 'hidden' }}
+              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30"
+              style={{ 
+                backfaceVisibility: 'hidden',
+                backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <div className="text-center">
-                <div className="w-32 h-32 mx-auto mb-4 bg-golden-400/20 rounded-full flex items-center justify-center">
-                  <div className="w-16 h-16 bg-golden-400/40 rounded-full flex items-center justify-center">
-                    <div className="w-8 h-8 bg-golden-400 rounded-full"></div>
-                  </div>
-                </div>
-                <p className="text-golden-400 font-light">Таро</p>
-              </div>
             </div>
             
             {/* Card Front */}
             <div 
-              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 flex flex-col items-center justify-center p-4 rotate-y-180"
+              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 rotate-y-180"
               style={{ 
                 backfaceVisibility: 'hidden',
-                backgroundImage: `url('${dailyCard.imageUrl}')`,
+                backgroundImage: `url('${selectedCard.imageUrl}')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}
@@ -123,7 +142,8 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
       {step === 'revealed' && (
         <div className="max-w-2xl mx-auto mb-8 animate-fade-in">
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-800/30">
-            <p className="text-white leading-relaxed text-lg">{dailyCard.description}</p>
+            <h3 className="text-white font-bold text-xl mb-4">{selectedCard.title}:</h3>
+            <p className="text-white leading-relaxed text-lg">{selectedCard.description}</p>
           </div>
         </div>
       )}
@@ -132,15 +152,12 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
       {showCTA && (
         <div className="max-w-2xl mx-auto animate-fade-in">
           <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-8 border border-golden-400/30">
-            <h3 className="text-2xl font-light text-golden-400 mb-4">
-              Хочешь узнать больше?
+            <h3 className="text-2xl font-light text-golden-400 mb-6">
+              Хочешь получить <em className="italic">Свой</em> Персональный Расклад?
             </h3>
-            <p className="text-white mb-6">
-              Получи персональный расклад под свою ситуацию
-            </p>
             <Button 
               onClick={onPersonalReadingClick}
-              className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="bg-gradient-to-r from-black to-purple-900 hover:from-purple-900 hover:to-black text-white font-medium text-lg px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               Получить персональный расклад
             </Button>
