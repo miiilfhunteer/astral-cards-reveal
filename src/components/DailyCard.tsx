@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { tarotCards } from '@/data/tarotCards';
 import { Volume2, VolumeX } from 'lucide-react';
 
 interface DailyCardProps {
@@ -11,27 +10,25 @@ interface DailyCardProps {
 
 export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalReadingClick }) => {
   const [step, setStep] = useState('initial'); // initial, preparing, revealing, revealed
-  const [dailyCard, setDailyCard] = useState(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showCTA, setShowCTA] = useState(false);
 
-  const handleGetCard = () => {
-    setStep('preparing');
-    // Scroll down smoothly
-    setTimeout(() => {
-      window.scrollTo({ 
-        top: window.innerHeight * 0.8, 
-        behavior: 'smooth' 
-      });
-    }, 500);
+  // Карта дня - Шут
+  const dailyCard = {
+    name: "Шут",
+    imageUrl: "https://static.tildacdn.com/tild6564-6365-4839-a538-366265396261/fool_with_label.jpg",
+    description: "Вот Твоя Карта Дня, это - Шут: эта карта символизирует новые начинания и спонтанные решения. Сегодня стоит довериться своей интуиции и сделать шаг в неизвестность, который может привести к удивительным открытиям."
+  };
 
-    // Show preparing message
+  useEffect(() => {
+    // Автоматически начинаем процесс при загрузке компонента
+    setStep('preparing');
+    
+    // Показываем подготовительное сообщение
     setTimeout(() => {
       setStep('revealing');
-      const randomCard = tarotCards[Math.floor(Math.random() * tarotCards.length)];
-      setDailyCard(randomCard);
     }, 3000);
-  };
+  }, []);
 
   const handleCardClick = () => {
     if (step === 'revealing') {
@@ -53,32 +50,19 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
     }
   };
 
-  if (step === 'initial') {
-    return (
-      <div className="text-center animate-fade-in">
-        <Button 
-          onClick={handleGetCard}
-          className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg px-8 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
-        >
-          Получить карту дня
-        </Button>
-      </div>
-    );
-  }
-
   if (step === 'preparing') {
     return (
       <div className="text-center animate-fade-in">
         <div className="flex items-center justify-center mb-6">
           <button 
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="flex items-center space-x-2 text-purple-200 hover:text-golden-400 transition-colors"
+            className="flex items-center space-x-2 text-white hover:text-golden-400 transition-colors"
           >
             {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
             <span className="text-sm">Звук {soundEnabled ? 'включен' : 'выключен'}</span>
           </button>
         </div>
-        <p className="text-xl text-purple-200 mb-8 animate-pulse">
+        <p className="text-xl text-white mb-8 animate-pulse">
           Сейчас появится ваша Карта Дня,<br />
           пожалуйста, включите звук чтобы прочувствовать момент
         </p>
@@ -115,37 +99,31 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             </div>
             
             {/* Card Front */}
-            {dailyCard && (
-              <div 
-                className="absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl shadow-2xl border border-golden-400/30 flex flex-col items-center justify-center p-6 rotate-y-180"
-                style={{ backfaceVisibility: 'hidden' }}
-              >
-                <div className="text-6xl mb-4">{dailyCard.symbol}</div>
-                <h3 className="text-xl font-light text-golden-400 mb-2">{dailyCard.name}</h3>
-                <p className="text-purple-200 text-center text-sm leading-relaxed">{dailyCard.meaning}</p>
-              </div>
-            )}
+            <div 
+              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 flex flex-col items-center justify-center p-4 rotate-y-180"
+              style={{ 
+                backfaceVisibility: 'hidden',
+                backgroundImage: `url('${dailyCard.imageUrl}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
+            </div>
           </div>
         </div>
         
         {step === 'revealing' && (
-          <p className="text-purple-200 mt-4 animate-pulse">
+          <p className="text-white mt-4 animate-pulse">
             Нажмите на карту, чтобы увидеть ее значение
           </p>
         )}
       </div>
 
       {/* Card Description */}
-      {step === 'revealed' && dailyCard && (
+      {step === 'revealed' && (
         <div className="max-w-2xl mx-auto mb-8 animate-fade-in">
-          <h2 className="text-2xl font-light text-golden-400 mb-4">
-            Вот Твоя Карта Дня
-          </h2>
-          <div className="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-800/30">
-            <h3 className="text-xl text-purple-200 mb-3">
-              <span className="text-golden-400">{dailyCard.name}</span>
-            </h3>
-            <p className="text-purple-100 leading-relaxed">{dailyCard.dailyMessage}</p>
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-800/30">
+            <p className="text-white leading-relaxed text-lg">{dailyCard.description}</p>
           </div>
         </div>
       )}
@@ -157,7 +135,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             <h3 className="text-2xl font-light text-golden-400 mb-4">
               Хочешь узнать больше?
             </h3>
-            <p className="text-purple-200 mb-6">
+            <p className="text-white mb-6">
               Получи персональный расклад под свою ситуацию
             </p>
             <Button 
