@@ -19,6 +19,17 @@ const Index = () => {
     }, 300);
   };
 
+  const handlePersonalReadingClick = () => {
+    setShowPersonalReading(true);
+    // Scroll to personal reading form
+    setTimeout(() => {
+      const personalReadingForm = document.getElementById('personal-reading-form');
+      if (personalReadingForm) {
+        personalReadingForm.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       
@@ -63,7 +74,7 @@ const Index = () => {
         >
           <DailyCard 
             onRevealed={setDailyCardRevealed}
-            onPersonalReadingClick={() => setShowPersonalReading(true)}
+            onPersonalReadingClick={handlePersonalReadingClick}
           />
         </section>
       )}

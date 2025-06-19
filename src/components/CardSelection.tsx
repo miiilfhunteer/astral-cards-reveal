@@ -104,6 +104,18 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     shuffleCards();
   }, []);
 
+  useEffect(() => {
+    // Scroll to payment when 3 cards are selected
+    if (selectedCards.length === cardsToSelect) {
+      setTimeout(() => {
+        const selectedCardsSection = document.getElementById('selected-cards-display');
+        if (selectedCardsSection) {
+          selectedCardsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  }, [selectedCards.length]);
+
   const shuffleCards = () => {
     setIsShuffling(true);
     const shuffled = [...allTarotCards].sort(() => Math.random() - 0.5);
@@ -197,7 +209,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
       {/* Selected Cards Display */}
       {selectedCards.length > 0 && (
-        <div className="mb-8">
+        <div id="selected-cards-display" className="mb-8">
           <h3 className="text-xl text-golden-400 mb-4">Судьба приготовила тебе такие карты:</h3>
           <div className="flex justify-center space-x-4">
             {selectedCards.map((card, index) => (
@@ -223,7 +235,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
           onClick={handleComplete}
           className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 animate-fade-in"
         >
-          Получить свой Персональный Расклад
+          Получить Персональный Расклад
         </Button>
       )}
     </div>

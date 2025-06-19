@@ -21,12 +21,23 @@ export const PersonalReading = () => {
       setStep('selection');
       // Scroll to card selection
       setTimeout(() => {
-        window.scrollTo({ 
-          top: document.body.scrollHeight, 
-          behavior: 'smooth' 
-        });
-      }, 500);
+        const cardSelectionSection = document.getElementById('card-selection-section');
+        if (cardSelectionSection) {
+          cardSelectionSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
     }
+  };
+
+  const handleCardSelectionComplete = () => {
+    setStep('payment');
+    // Scroll to payment section
+    setTimeout(() => {
+      const paymentSection = document.getElementById('payment-section');
+      if (paymentSection) {
+        paymentSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
   };
 
   const topics = [
@@ -41,7 +52,7 @@ export const PersonalReading = () => {
       <div className="max-w-4xl mx-auto">
         
         {step === 'form' && (
-          <div className="text-center animate-fade-in">
+          <div id="personal-reading-form" className="text-center animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-light text-golden-400 mb-8">
               Персональный расклад
             </h2>
@@ -121,14 +132,16 @@ export const PersonalReading = () => {
         )}
 
         {step === 'selection' && (
-          <CardSelection 
-            formData={formData}
-            onComplete={() => setStep('payment')}
-          />
+          <div id="card-selection-section">
+            <CardSelection 
+              formData={formData}
+              onComplete={handleCardSelectionComplete}
+            />
+          </div>
         )}
 
         {step === 'payment' && (
-          <div className="text-center animate-fade-in">
+          <div id="payment-section" className="text-center animate-fade-in">
             <h2 className="text-3xl font-light text-golden-400 mb-8">
               Почти готово!
             </h2>
@@ -137,7 +150,7 @@ export const PersonalReading = () => {
                 Стоимость персонального расклада: <span className="text-golden-400 text-xl font-medium">400 грн.</span>
               </p>
               <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
-                Оплатить расклад
+                Получить Персональный Расклад
               </Button>
               <p className="text-purple-400 text-sm mt-4">
                 Безопасная оплата • Моментальное получение результата
