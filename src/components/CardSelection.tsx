@@ -13,6 +13,7 @@ interface CardSelectionProps {
 export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComplete }) => {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<any[]>([]);
+  const [flippingCard, setFlippingCard] = useState<number | null>(null);
 
   // All 78 tarot card images
   const allCards = [
@@ -117,27 +118,33 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const handleCardClick = (index: number) => {
     if (selectedCards.includes(index) || selectedCards.length >= 3) return;
     
-    const newSelectedCards = [...selectedCards, index];
-    setSelectedCards(newSelectedCards);
+    // Анимация переворачивания карты
+    setFlippingCard(index);
     
-    // Get random card from the 78 cards
-    const randomCardIndex = Math.floor(Math.random() * allCards.length);
-    const newCard = {
-      image: allCards[randomCardIndex],
-      name: cardNames[randomCardIndex] || `Карта ${randomCardIndex + 1}`
-    };
-    
-    setRevealedCards([...revealedCards, newCard]);
-    
-    // If all 3 cards are selected, scroll to bottom
-    if (newSelectedCards.length === 3) {
-      setTimeout(() => {
-        window.scrollTo({ 
-          top: document.body.scrollHeight, 
-          behavior: 'smooth' 
-        });
-      }, 1000);
-    }
+    setTimeout(() => {
+      const newSelectedCards = [...selectedCards, index];
+      setSelectedCards(newSelectedCards);
+      
+      // Get random card from the 78 cards
+      const randomCardIndex = Math.floor(Math.random() * allCards.length);
+      const newCard = {
+        image: allCards[randomCardIndex],
+        name: cardNames[randomCardIndex] || `Карта ${randomCardIndex + 1}`
+      };
+      
+      setRevealedCards([...revealedCards, newCard]);
+      setFlippingCard(null);
+      
+      // If all 3 cards are selected, scroll to bottom
+      if (newSelectedCards.length === 3) {
+        setTimeout(() => {
+          window.scrollTo({ 
+            top: document.body.scrollHeight, 
+            behavior: 'smooth' 
+          });
+        }, 1000);
+      }
+    }, 600); // Время анимации переворачивания
   };
 
   return (
@@ -176,7 +183,9 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
           >
             <div className="relative w-full aspect-[2/3]">
               <div
-                className="w-full h-full rounded-lg shadow-lg border border-golden-400/30"
+                className={`w-full h-full rounded-lg shadow-lg border border-golden-400/30 card-flip ${
+                  flippingCard === index ? 'flipping' : ''
+                }`}
                 style={{
                   backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
                   backgroundSize: 'cover',
@@ -202,17 +211,17 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
             Судьба приготовила тебе такие карты:
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 max-w-4xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-8 max-w-4xl mx-auto">
             {revealedCards.map((card, index) => (
-              <div key={index} className="text-center">
-                <div className="w-48 h-72 mx-auto mb-4">
+              <div key={index} className="text-center flex-shrink-0">
+                <div className="w-32 h-48 sm:w-40 sm:h-60 md:w-48 md:h-72 mx-auto mb-4">
                   <img
                     src={card.image}
                     alt={card.name}
                     className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
                   />
                 </div>
-                <div className="text-golden-400 font-medium text-sm md:text-base leading-tight whitespace-normal">
+                <div className="text-golden-400 font-medium text-xs sm:text-sm md:text-base leading-tight whitespace-normal max-w-32 sm:max-w-40 md:max-w-48 mx-auto">
                   {card.name.includes(' ') ? (
                     <>
                       <div>{card.name.split(' ')[0]}</div>
@@ -228,7 +237,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
           <Button
             onClick={onComplete}
-            className="w-full max-w-md mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-sm md:text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 whitespace-normal leading-tight"
+            className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-xs sm:text-sm md:text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 whitespace-normal leading-tight px-2"
           >
             Получить Персональный Расклад
           </Button>
