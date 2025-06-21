@@ -10,10 +10,12 @@ const Index = () => {
 
   const handleGetCard = () => {
     setShowDailyCard(true);
-    // Scroll to the bottom of the viewport to show the card section
+    // Улучшенный скролл для мобильных устройств - скролл на полную высоту экрана + дополнительный отступ
     setTimeout(() => {
+      const isMobile = window.innerWidth <= 768;
+      const scrollTarget = isMobile ? window.innerHeight + 100 : window.innerHeight;
       window.scrollTo({ 
-        top: window.innerHeight, 
+        top: scrollTarget, 
         behavior: 'smooth' 
       });
     }, 300);

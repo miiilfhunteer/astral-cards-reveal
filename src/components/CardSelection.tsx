@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -211,17 +212,18 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
             Судьба приготовила тебе такие карты:
           </h3>
           
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-8 max-w-4xl mx-auto">
+          {/* Горизонтальное отображение карт */}
+          <div className="flex justify-center items-start gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 max-w-full mx-auto overflow-x-auto">
             {revealedCards.map((card, index) => (
               <div key={index} className="text-center flex-shrink-0">
-                <div className="w-32 h-48 sm:w-40 sm:h-60 md:w-48 md:h-72 mx-auto mb-4">
+                <div className="w-24 h-36 xs:w-28 xs:h-42 sm:w-32 sm:h-48 md:w-40 md:h-60 lg:w-48 lg:h-72 mx-auto mb-3">
                   <img
                     src={card.image}
                     alt={card.name}
                     className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
                   />
                 </div>
-                <div className="text-golden-400 font-medium text-xs sm:text-sm md:text-base leading-tight whitespace-normal max-w-32 sm:max-w-40 md:max-w-48 mx-auto">
+                <div className="text-golden-400 font-medium text-xs sm:text-sm md:text-base leading-tight whitespace-normal max-w-24 xs:max-w-28 sm:max-w-32 md:max-w-40 lg:max-w-48 mx-auto">
                   {card.name.includes(' ') ? (
                     <>
                       <div>{card.name.split(' ')[0]}</div>
@@ -237,9 +239,9 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
           <Button
             onClick={onComplete}
-            className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-xs sm:text-sm md:text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 whitespace-normal leading-tight px-2"
+            className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-xs sm:text-sm md:text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-4 leading-tight"
           >
-            Получить Персональный Расклад
+            <span className="break-words">Получить Персональный Расклад</span>
           </Button>
         </div>
       )}
