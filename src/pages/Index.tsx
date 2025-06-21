@@ -10,14 +10,12 @@ const Index = () => {
 
   const handleGetCard = () => {
     setShowDailyCard(true);
-    // Scroll to the second screen with more padding for mobile
+    // Scroll to the bottom of the viewport to show the card section
     setTimeout(() => {
-      const secondScreen = document.getElementById('daily-card-section');
-      if (secondScreen) {
-        const yOffset = window.innerWidth <= 768 ? -100 : -50; // More offset for mobile
-        const y = secondScreen.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
+      window.scrollTo({ 
+        top: window.innerHeight, 
+        behavior: 'smooth' 
+      });
     }, 300);
   };
 
@@ -39,7 +37,7 @@ const Index = () => {
       <section 
         className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/4a22e54a-17ca-4595-8af8-3307c7f1b8b1.png')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/4a22e54a-17ca-4595-8af8-3307c7f1b8b1.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

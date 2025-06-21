@@ -149,7 +149,7 @@ export const PersonalReading = () => {
               <p className="text-purple-200 mb-6 text-sm md:text-base leading-relaxed">
                 Ваш Персональный расклад почти готов, пожалуйста, совершите оплату для продолжения, стоимость расклада: <span className="text-golden-400 text-lg font-medium">400 грн.</span>
               </p>
-              <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-sm md:text-base py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2">
+              <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight">
                 Получить Персональный Расклад
               </Button>
               <p className="text-purple-400 text-xs mt-4">

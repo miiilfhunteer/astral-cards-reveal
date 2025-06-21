@@ -140,7 +140,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
         
         {step === 'revealing' && (
           <p className="text-white mt-6 animate-pulse text-xl md:text-2xl px-4">
-            <span className="font-bold">Нажмите</span> на карту, чтобы увидеть ее значение
+            <span className="font-bold text-2xl md:text-3xl">Нажмите</span> на карту, чтобы увидеть ее значение
           </p>
         )}
       </div>
@@ -164,7 +164,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             </h3>
             <Button 
               onClick={onPersonalReadingClick}
-              className="w-full bg-gradient-to-r from-black to-purple-900 hover:from-purple-900 hover:to-black text-white font-medium text-base md:text-lg px-6 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 shake-button"
+              className="w-full bg-gradient-to-r from-black to-purple-900 hover:from-purple-900 hover:to-black text-white font-medium text-sm md:text-base px-4 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 shake-button whitespace-normal leading-tight"
             >
               Получить персональный расклад
             </Button>
