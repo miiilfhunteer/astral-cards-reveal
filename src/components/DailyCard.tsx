@@ -63,16 +63,23 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
       setStep('revealed');
       onRevealed(true);
       
-      // Show CTA after a delay
+      // Show CTA after a delay and scroll to bottom
       setTimeout(() => {
         setShowCTA(true);
+        // Scroll to bottom of page to show the CTA
+        setTimeout(() => {
+          window.scrollTo({ 
+            top: document.body.scrollHeight, 
+            behavior: 'smooth' 
+          });
+        }, 500);
       }, 2000);
     }
   };
 
   if (step === 'preparing') {
     return (
-      <div className="text-center animate-fade-in">
+      <div className="text-center">
         <div className="flex items-center justify-center mb-6">
           <button 
             onClick={() => setSoundEnabled(!soundEnabled)}
@@ -82,7 +89,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             <span className="text-sm">Звук {soundEnabled ? 'включен' : 'выключен'}</span>
           </button>
         </div>
-        <p className="text-xl text-white mb-8 animate-pulse">
+        <p className="text-lg md:text-xl text-white mb-8 animate-pulse px-4">
           Сейчас появится ваша Карта Дня,<br />
           пожалуйста, включите звук чтобы прочувствовать момент
         </p>
@@ -96,7 +103,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   if (!selectedCard) return null;
 
   return (
-    <div className="text-center">
+    <div className="text-center w-full max-w-4xl mx-auto">
       {/* Card Display */}
       <div className="mb-8">
         <div 
@@ -132,32 +139,32 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
         </div>
         
         {step === 'revealing' && (
-          <p className="text-white mt-4 animate-pulse">
-            Нажмите на карту, чтобы увидеть ее значение
+          <p className="text-white mt-6 animate-pulse text-xl md:text-2xl px-4">
+            <span className="font-bold">Нажмите</span> на карту, чтобы увидеть ее значение
           </p>
         )}
       </div>
 
       {/* Card Description */}
       {step === 'revealed' && (
-        <div className="max-w-2xl mx-auto mb-8 animate-fade-in">
+        <div className="max-w-2xl mx-auto mb-8 px-4">
           <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-800/30">
-            <h3 className="text-white font-bold text-xl mb-4">{selectedCard.title}:</h3>
-            <p className="text-white leading-relaxed text-lg">{selectedCard.description}</p>
+            <h3 className="text-white font-bold text-lg md:text-xl mb-4">{selectedCard.title}:</h3>
+            <p className="text-white leading-relaxed text-base md:text-lg">{selectedCard.description}</p>
           </div>
         </div>
       )}
 
       {/* CTA for Personal Reading */}
       {showCTA && (
-        <div className="max-w-2xl mx-auto animate-fade-in">
-          <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-8 border border-golden-400/30">
-            <h3 className="text-2xl font-light text-golden-400 mb-6">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-golden-400/30">
+            <h3 className="text-xl md:text-2xl font-light text-golden-400 mb-6">
               Хочешь получить <em className="italic">Свой</em> Персональный Расклад?
             </h3>
             <Button 
               onClick={onPersonalReadingClick}
-              className="bg-gradient-to-r from-black to-purple-900 hover:from-purple-900 hover:to-black text-white font-medium text-lg px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="w-full bg-gradient-to-r from-black to-purple-900 hover:from-purple-900 hover:to-black text-white font-medium text-base md:text-lg px-6 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 shake-button"
             >
               Получить персональный расклад
             </Button>

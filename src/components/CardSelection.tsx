@@ -98,6 +98,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [selectedCards, setSelectedCards] = useState<any[]>([]);
   const [shuffledCards, setShuffledCards] = useState<any[]>([]);
   const [isShuffling, setIsShuffling] = useState(false);
+  const [flippingCards, setFlippingCards] = useState<Set<string>>(new Set());
   const cardsToSelect = 3;
 
   useEffect(() => {
@@ -105,14 +106,14 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   }, []);
 
   useEffect(() => {
-    // Scroll to payment when 3 cards are selected
+    // Scroll to selected cards when 3 cards are selected
     if (selectedCards.length === cardsToSelect) {
       setTimeout(() => {
         const selectedCardsSection = document.getElementById('selected-cards-display');
         if (selectedCardsSection) {
           selectedCardsSection.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 500);
+      }, 1000); // Wait for flip animation to complete
     }
   }, [selectedCards.length]);
 
@@ -128,7 +129,18 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
   const handleCardSelect = (card: any) => {
     if (selectedCards.length < cardsToSelect && !selectedCards.includes(card)) {
-      setSelectedCards([...selectedCards, card]);
+      // Add flip animation
+      const cardKey = `${card.name}-${shuffledCards.indexOf(card)}`;
+      setFlippingCards(prev => new Set(prev).add(cardKey));
+      
+      setTimeout(() => {
+        setSelectedCards([...selectedCards, card]);
+        setFlippingCards(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(cardKey);
+          return newSet;
+        });
+      }, 500);
     }
   };
 
@@ -138,12 +150,27 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     }
   };
 
+  const formatCardName = (name: string) => {
+    // Split long names into two lines for mobile
+    if (name.length > 10) {
+      const words = name.split(' ');
+      if (words.length >= 2) {
+        const mid = Math.ceil(words.length / 2);
+        return {
+          line1: words.slice(0, mid).join(' '),
+          line2: words.slice(mid).join(' ')
+        };
+      }
+    }
+    return { line1: name, line2: '' };
+  };
+
   return (
-    <div className="text-center animate-fade-in">
-      <h2 className="text-3xl font-light text-golden-400 mb-4">
+    <div className="text-center px-4">
+      <h2 className="text-2xl md:text-3xl font-light text-golden-400 mb-4">
         Привет, {formData.name}!
       </h2>
-      <p className="text-xl text-purple-200 mb-8">
+      <p className="text-lg md:text-xl text-purple-200 mb-8">
         Выбери {cardsToSelect} карты, которые тебя привлекают
       </p>
 
@@ -167,76 +194,108 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       </div>
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-4 mb-8 max-w-6xl mx-auto">
-        {shuffledCards.slice(0, 24).map((card, index) => (
-          <div
-            key={`${card.name}-${index}`}
-            onClick={() => handleCardSelect(card)}
-            className={`
-              relative w-16 h-24 md:w-20 md:h-32 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:z-10 rounded-lg
-              ${selectedCards.includes(card) 
-                ? 'ring-2 ring-golden-400 scale-105' 
-                : 'hover:ring-1 hover:ring-purple-400'
-              }
-              ${selectedCards.length >= cardsToSelect && !selectedCards.includes(card) 
-                ? 'opacity-50 cursor-not-allowed' 
-                : ''
-              }
-            `}
-          >
-            <div 
-              className="w-full h-full rounded-lg shadow-lg border border-golden-400/30"
-              style={{
-                backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
+      <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-4 mb-8 max-w-6xl mx-auto">
+        {shuffledCards.slice(0, 24).map((card, index) => {
+          const cardKey = `${card.name}-${index}`;
+          const isFlipping = flippingCards.has(cardKey);
+          const isSelected = selectedCards.includes(card);
+          
+          return (
+            <div
+              key={cardKey}
+              onClick={() => handleCardSelect(card)}
+              className={`
+                relative w-12 h-18 md:w-20 md:h-32 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:z-10 rounded-lg
+                ${isSelected 
+                  ? 'ring-2 ring-golden-400 scale-105' 
+                  : 'hover:ring-1 hover:ring-purple-400'
+                }
+                ${selectedCards.length >= cardsToSelect && !isSelected 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : ''
+                }
+              `}
+              style={{ perspective: '1000px' }}
             >
-            </div>
-            
-            {selectedCards.includes(card) && (
-              <div className="absolute inset-0 bg-golden-400/20 rounded-lg flex items-center justify-center">
-                <div className="w-6 h-6 bg-golden-400 rounded-full flex items-center justify-center">
-                  <span className="text-black text-xs font-bold">
-                    {selectedCards.indexOf(card) + 1}
-                  </span>
-                </div>
+              <div 
+                className={`relative w-full h-full transition-transform duration-500 ${isFlipping ? 'rotate-y-180' : ''}`}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {/* Card Back */}
+                <div 
+                  className="absolute inset-0 w-full h-full rounded-lg shadow-lg border border-golden-400/30"
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
+                
+                {/* Card Front */}
+                <div 
+                  className="absolute inset-0 w-full h-full rounded-lg shadow-lg border border-golden-400/30 rotate-y-180"
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    backgroundImage: `url('${card.imageUrl}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
               </div>
-            )}
-          </div>
-        ))}
+              
+              {isSelected && (
+                <div className="absolute inset-0 bg-golden-400/20 rounded-lg flex items-center justify-center">
+                  <div className="w-4 h-4 md:w-6 md:h-6 bg-golden-400 rounded-full flex items-center justify-center">
+                    <span className="text-black text-xs font-bold">
+                      {selectedCards.indexOf(card) + 1}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Selected Cards Display */}
       {selectedCards.length > 0 && (
         <div id="selected-cards-display" className="mb-8">
-          <h3 className="text-xl text-golden-400 mb-4">Судьба приготовила тебе такие карты:</h3>
-          <div className="flex justify-center space-x-4">
-            {selectedCards.map((card, index) => (
-              <div key={index} className="text-center">
-                <div 
-                  className="w-20 h-32 rounded-lg shadow-lg border border-golden-400/30 mb-2"
-                  style={{
-                    backgroundImage: `url('${card.imageUrl}')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                ></div>
-                <p className="text-xs text-purple-200">{card.name}</p>
-              </div>
-            ))}
+          <h3 className="text-lg md:text-xl text-golden-400 mb-6 text-center">Судьба приготовила тебе такие карты:</h3>
+          <div className="flex justify-center items-end space-x-2 md:space-x-4 max-w-sm mx-auto">
+            {selectedCards.map((card, index) => {
+              const cardName = formatCardName(card.name);
+              return (
+                <div key={index} className="text-center flex-1">
+                  <div 
+                    className="w-16 h-24 md:w-20 md:h-32 rounded-lg shadow-lg border border-golden-400/30 mb-2 mx-auto"
+                    style={{
+                      backgroundImage: `url('${card.imageUrl}')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  ></div>
+                  <div className="text-xs text-purple-200 leading-tight">
+                    <div>{cardName.line1}</div>
+                    {cardName.line2 && <div>{cardName.line2}</div>}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {/* Complete Button */}
       {selectedCards.length === cardsToSelect && (
-        <Button
-          onClick={handleComplete}
-          className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 animate-fade-in"
-        >
-          Получить Персональный Расклад
-        </Button>
+        <div className="px-4">
+          <Button
+            onClick={handleComplete}
+            className="w-full max-w-sm mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-base md:text-lg px-6 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Получить Персональный Расклад
+          </Button>
+        </div>
       )}
     </div>
   );

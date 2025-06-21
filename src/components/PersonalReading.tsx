@@ -52,15 +52,15 @@ export const PersonalReading = () => {
       <div className="max-w-4xl mx-auto">
         
         {step === 'form' && (
-          <div id="personal-reading-form" className="text-center animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-light text-golden-400 mb-8">
+          <div id="personal-reading-form" className="text-center">
+            <h2 className="text-2xl md:text-4xl font-light text-golden-400 mb-8">
               Персональный расклад
             </h2>
-            <p className="text-xl text-purple-200 mb-12">
+            <p className="text-lg md:text-xl text-purple-200 mb-12 px-4">
               Расскажи немного о себе, чтобы карты дали тебе точный ответ
             </p>
 
-            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto space-y-6">
+            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto space-y-6 px-4">
               <div className="text-left">
                 <Label htmlFor="name" className="text-purple-200 mb-2 block">
                   Твоё имя
@@ -141,18 +141,18 @@ export const PersonalReading = () => {
         )}
 
         {step === 'payment' && (
-          <div id="payment-section" className="text-center animate-fade-in">
-            <h2 className="text-3xl font-light text-golden-400 mb-8">
+          <div id="payment-section" className="text-center px-4">
+            <h2 className="text-2xl md:text-3xl font-light text-golden-400 mb-8">
               Почти готово!
             </h2>
-            <div className="max-w-md mx-auto bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-8 border border-golden-400/30">
-              <p className="text-purple-200 mb-6">
-                Стоимость персонального расклада: <span className="text-golden-400 text-xl font-medium">400 грн.</span>
+            <div className="max-w-sm mx-auto bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-6 border border-golden-400/30">
+              <p className="text-purple-200 mb-6 text-sm md:text-base leading-relaxed">
+                Ваш Персональный расклад почти готов, пожалуйста, совершите оплату для продолжения, стоимость расклада: <span className="text-golden-400 text-lg font-medium">400 грн.</span>
               </p>
-              <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
+              <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-sm md:text-base py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2">
                 Получить Персональный Расклад
               </Button>
-              <p className="text-purple-400 text-sm mt-4">
+              <p className="text-purple-400 text-xs mt-4">
                 Безопасная оплата • Моментальное получение результата
               </p>
             </div>
