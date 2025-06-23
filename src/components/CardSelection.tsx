@@ -17,64 +17,63 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [flippingCard, setFlippingCard] = useState<number | null>(null);
   const [shuffledIndexes, setShuffledIndexes] = useState<number[]>([]);
 
-  // Новые карты с обновленными ссылками Google Drive (все 53 карты)
+  // Обновленные карты с новыми ссылками postimg.cc (все 55 карт)
   const allCards = [
-    "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
-    "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
-    "https://drive.google.com/uc?id=1B3-zSdDXESpO67LJ0fZIgKtq2rENc6Rp",
-    "https://drive.google.com/uc?id=1Fl67__ubQJZMmxqtwfyPXuzmUl4mpryr",
-    "https://drive.google.com/uc?id=1HzRh2iTG7CI2ZRTwvbfd2CAfSOUk9HLz",
-    "https://drive.google.com/uc?id=1Thg-zY2EZrS3V349ZKFmiLMQciZRGlCm",
-    "https://drive.google.com/uc?id=15WUuqGgkkTbPdwDJU-xtEzrAfVEhlDbJ",
-    "https://drive.google.com/uc?id=1ArWtJZLA2-dR1q435c41woODwi6zZ_CK",
-    "https://drive.google.com/uc?id=1PYY88rCjPj62kdCksJCc1iAbG_1c_kwE",
-    "https://drive.google.com/uc?id=1eVo1mLDemHydoq6MgNkWkUYifWDC-vkZ",
-    "https://drive.google.com/uc?id=17HyrjPkiZZUZM2Rnv2ELdPgu59D_zHeq",
-    "https://drive.google.com/uc?id=1J9N2rfjcp1XGA2Qoq2ghzMyimDDfuGcp",
-    "https://drive.google.com/uc?id=1c40LjHcEQsnz8Tl3UYU2aedR2GYw822L",
-    "https://drive.google.com/uc?id=1zW9vPXg2kQ22ro4PNiYjyDign75Hw1Sb",
-    "https://drive.google.com/uc?id=1ND74nGBVFLKWt3jjVQzaaremcxXDgJk8",
-    "https://drive.google.com/uc?id=1Z990yR_sH746ovvRSo8VMmFKM7kHY2tc",
-    "https://drive.google.com/uc?id=1ewnU_8RZQ2TYWho7Tp_-q1Nvm55goLYN",
-    "https://drive.google.com/uc?id=1fdwlAWy8duGzNebCTmWy8bAs7JszPh9b",
-    "https://drive.google.com/uc?id=1tg_iwMuwzCEhyNF7NjJniciDaJfQ6Tdi",
-    "https://drive.google.com/uc?id=19uvzq5YXn4imKP295JykSZdiW7PrLl3s",
-    "https://drive.google.com/uc?id=1DPSLl67Akv5ppBTMYLIqRhDH9OJ9H8Ko",
-    "https://drive.google.com/uc?id=1Ss_pI2AEHTSGH8zmIz6SjUA0-oeH8dSo",
-    "https://drive.google.com/uc?id=1hbHmv1qrw0W8UJysdEU0DeyrVTZGmmce",
-    "https://drive.google.com/uc?id=1J4QddBrivw3qQy84dDaEfLtwqQ9iZWav",
-    "https://drive.google.com/uc?id=1T3vUpX3IK970cZ5vcv1w0vv0wy_Duo10",
-    "https://drive.google.com/uc?id=1tMx5lU35MsROk8cV3Fd7ucOTqn3NGFov",
-    "https://drive.google.com/uc?id=1x9rqCu8CRJqz8-Vp6bl_jQl9L5INJlMB",
-    "https://drive.google.com/uc?id=1NaPLygJKvxINfBIzmf4sgLl6XteIHKwA",
-    "https://drive.google.com/uc?id=1WwAGPblbTK_08FfsZS7u2TX6kDjUxksu",
-    "https://drive.google.com/uc?id=1d8A4fAmbPJLkfGIeJa3xERXo5b2rLhCg",
-    "https://drive.google.com/uc?id=1kDz06viMvWWkblozXYuqo1razBvOa_JB",
-    "https://drive.google.com/uc?id=1n2p07oh3tJ69fI_UgLG-hmrYirTfCP5p",
-    "https://drive.google.com/uc?id=10xWO3uHhpZ5BOJ7pmIpGsTfMgXXcvVvT",
-    "https://drive.google.com/uc?id=16fI1vp5AosW2vb6VOfUmbxf7s3Y8Xbb4",
-    "https://drive.google.com/uc?id=1JF4nwYjAzactJ_-IcMtt1rPSY5X1RNo4",
-    "https://drive.google.com/uc?id=1lhFBpRSwpZ-IpoFaYN9MlXFBtNELRkGL",
-    "https://drive.google.com/uc?id=1MsC9VEqQpntypu1l5hm2D-pyESo83W4-",
-    "https://drive.google.com/uc?id=1d4igjWKD4Oe8HRYMQIvjfD1iBlPa8Pkv",
-    "https://drive.google.com/uc?id=1ghsRXn2tN8SHsYBUlwkwaw6rM8zBVhtf",
-    "https://drive.google.com/uc?id=1lRidvC9WAauknKQH1e41pmxExV3LokBh",
-    "https://drive.google.com/uc?id=1HeGI8Rj727EZq6vacY3NBGM0byya7yH",
-    "https://drive.google.com/uc?id=1lioOz0pGBFRZHDgOFTSwzTZIv2HSeirR",
-    "https://drive.google.com/uc?id=1pUjMgtsmZHEbdpF8lbctPUKD3uWUwmI-",
-    "https://drive.google.com/uc?id=1qsp7pHy90liEpHp8nz35wPYUGcJ3C0vg",
-    "https://drive.google.com/uc?id=1sVPduSxem9Q-s3S1WRtLwsTm8XMBRZCn",
-    "https://drive.google.com/uc?id=1-9wwv_tvFY81Hx_8vyA5ppqUnt2VK7LC",
-    "https://drive.google.com/uc?id=1CuL1CyGrnpsqa9f_SqdTwXpQKbPi1e5h",
-    "https://drive.google.com/uc?id=1ph7gQmYOlX8WXU0mgZWGIb_eAH41fftA",
-    "https://drive.google.com/uc?id=1rXpP0PMTKmWzCMrNNiBGV1DzWWBUVLNG",
-    "https://drive.google.com/uc?id=1EU9VVovCz-VgV8LzMjnZWWZ3ZO0fjLvh",
-    "https://drive.google.com/uc?id=1gGdyjObN_fRNVkdcQnSlWXRvMyH_OJRU",
-    "https://drive.google.com/uc?id=1jfqjd4kiD5yFJ5mT9s1ZcEdRbcP6FVmx",
-    "https://drive.google.com/uc?id=1oelonzVyzn7EGrfphL2NqFxF6CQOfaiR",
-    "https://drive.google.com/uc?id=1G2UdCDHqLvRNdf7e7MqPauV07xK9M3HO",
-    "https://drive.google.com/uc?id=1LqexLW88QrNTEx2wfUKLkDwvTbw-sHUL",
-    "https://drive.google.com/uc?id=1gWuZdwolfu4SHIqpjJsVA3fkZRbMWlpN"
+    "https://postimg.cc/4nzQ74FK", // Шут
+    "https://postimg.cc/F7Ngjt2T", // Маг
+    "https://postimg.cc/Tp0j07xf", // Верховная Жрица
+    "https://postimg.cc/G4pF5F3Y", // Император
+    "https://postimg.cc/75Q385bR", // Императрица
+    "https://postimg.cc/d7k8qJyV", // Иерофант
+    "https://postimg.cc/kV0WGLQF", // Влюбленные
+    "https://postimg.cc/sGyS9S0M", // Колесница
+    "https://postimg.cc/dkGrynnM", // Сила
+    "https://postimg.cc/9wp9xMvJ", // Отшельник
+    "https://postimg.cc/MXbrkYwr", // Колесо Фортуны
+    "https://postimg.cc/6TN11mkv", // Справедливость
+    "https://postimg.cc/zVz2qRXD", // Повешенный
+    "https://postimg.cc/hf2yvPfL", // Смерть
+    "https://postimg.cc/jW7ZMHvc", // Умеренность
+    "https://postimg.cc/k2Djb3bk", // Дьявол
+    "https://postimg.cc/K1V07q74", // Башня
+    "https://postimg.cc/NLYpxrX8", // Звезда
+    "https://postimg.cc/hQSs4HnZ", // Луна
+    "https://postimg.cc/phQkHPwn", // Солнце
+    "https://postimg.cc/hzRM6X5B", // Суд
+    "https://postimg.cc/4n5w2NvD", // Мир
+    "https://postimg.cc/SJxdBFDJ", // Туз Жезлов
+    "https://postimg.cc/qNtL7cfr", // Двойка Жезлов
+    "https://postimg.cc/56Kg17Rp", // Тройка Жезлов
+    "https://postimg.cc/FY2xkfmL", // Четверка Жезлов
+    "https://postimg.cc/mcCyYb26", // Пятерка Жезлов
+    "https://postimg.cc/G8RJzZ43", // Шестерка Жезлов
+    "https://postimg.cc/vgv7K3nr", // Семерка Жезлов
+    "https://postimg.cc/kRXNPKNk", // Восьмерка Жезлов
+    "https://postimg.cc/s1V4WCFw", // Девятка Жезлов
+    "https://postimg.cc/RqXQQp49", // Десятка Жезлов
+    "https://postimg.cc/Tp1jkj3b", // Паж Жезлов
+    "https://postimg.cc/3dqXzykc", // Рыцарь Жезлов
+    "https://postimg.cc/Yvm67pgq", // Королева Жезлов
+    "https://postimg.cc/v1FWHpL7", // Король Жезлов
+    "https://postimg.cc/jWHyWZZp", // Туз Кубков
+    "https://postimg.cc/YG8gRjc8", // Двойка Кубков
+    "https://postimg.cc/8f5v0DNG", // Тройка Кубков
+    "https://postimg.cc/xqxMbk31", // Четверка Кубков
+    "https://postimg.cc/3WJ2Rjpq", // Пятерка Кубков
+    "https://postimg.cc/JGsJ31pc", // Шестерка Кубков
+    "https://postimg.cc/mPMHqmfP", // Семерка Кубков
+    "https://postimg.cc/JGSXP9gw", // Восьмерка Кубков
+    "https://postimg.cc/Y4HWwQMb", // Девятка Кубков
+    "https://postimg.cc/7CnTPbLD", // Десятка Кубков
+    "https://postimg.cc/mzZ1PRc9", // Паж Кубков
+    "https://postimg.cc/tZrZPfPM", // Рыцарь Кубков
+    "https://postimg.cc/9wr4BpYF", // Королева Кубков
+    "https://postimg.cc/RqFn9Sx5", // Король Кубков
+    "https://postimg.cc/Jt2HzfRy", // Туз Мечей
+    "https://postimg.cc/crtggFJF", // Двойка Мечей
+    "https://postimg.cc/4YCKzp7s", // Тройка Мечей
+    "https://postimg.cc/sMpMK17S", // Четверка Мечей
+    "https://postimg.cc/sBsvLy4L"  // Пятерка Мечей
   ];
 
   const cardNames = [
@@ -205,37 +204,43 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                       transformStyle: 'preserve-3d'
                     }}
                   >
-                    {/* Card Back (или фронт после переворота) */}
+                    {/* Card Back */}
                     <div
                       className="absolute inset-0 w-full h-full rounded-lg"
                       style={{
                         backfaceVisibility: 'hidden'
                       }}
                     >
-                      {isFlipping && isSelected ? (
-                        <img
-                          src={allCards[cardImageIndex]}
-                          alt={cardNames[cardImageIndex] || 'Карта Таро'}
-                          className="w-full h-full object-cover rounded-lg"
-                          onLoad={() => {
-                            console.log('CardSelection: Card flip image loaded:', allCards[cardImageIndex]);
-                          }}
-                          onError={(e) => {
-                            console.error('CardSelection: Card flip image error:', allCards[cardImageIndex]);
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
-                          }}
-                        />
-                      ) : (
-                        <div
-                          className="w-full h-full rounded-lg"
-                          style={{
-                            backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                          }}
-                        />
-                      )}
+                      <div
+                        className="w-full h-full rounded-lg"
+                        style={{
+                          backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Card Front (показывается после переворота) */}
+                    <div
+                      className="absolute inset-0 w-full h-full rounded-lg rotate-y-180"
+                      style={{
+                        backfaceVisibility: 'hidden'
+                      }}
+                    >
+                      <img
+                        src={allCards[cardImageIndex]}
+                        alt={cardNames[cardImageIndex] || 'Карта Таро'}
+                        className="w-full h-full object-cover rounded-lg"
+                        onLoad={() => {
+                          console.log('CardSelection: Card flip image loaded:', allCards[cardImageIndex]);
+                        }}
+                        onError={(e) => {
+                          console.error('CardSelection: Card flip image error:', allCards[cardImageIndex]);
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
+                        }}
+                      />
                     </div>
                   </div>
                 </div>

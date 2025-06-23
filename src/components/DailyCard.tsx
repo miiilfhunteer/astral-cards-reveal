@@ -14,65 +14,65 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [showCTA, setShowCTA] = useState(false);
   const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Новые карты с обновленными ссылками Google Drive
+  // Обновленные карты с новыми ссылками postimg.cc
   const dailyCards = [
     {
       name: "Шут",
-      imageUrl: "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
+      imageUrl: "https://postimg.cc/4nzQ74FK",
       title: "Вот Твоя Карта Дня, это - Шут",
       description: "эта карта символизирует новые начинания и спонтанные решения. Сегодня стоит довериться своей интуиции и сделать шаг в неизвестность, который может привести к удивительным открытиям."
     },
     {
       name: "Маг",
-      imageUrl: "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
+      imageUrl: "https://postimg.cc/F7Ngjt2T",
       title: "Вот Твоя Карта Дня, это - Маг",
       description: "карта творческой силы и проявления намерений. Сегодня у тебя есть все необходимые ресурсы, чтобы воплотить свои желания в реальность, просто сосредоточься на своей цели."
     },
     {
       name: "Верховная Жрица",
-      imageUrl: "https://drive.google.com/uc?id=1B3-zSdDXESpO67LJ0fZIgKtq2rENc6Rp",
+      imageUrl: "https://postimg.cc/Tp0j07xf",
       title: "Вот Твоя Карта Дня, это - Верховная Жрица",
       description: "карта интуиции и скрытых знаний. Сегодня обрати внимание на свой внутренний голос и тайные знаки вокруг, они могут открыть тебе важную истину."
     },
     {
       name: "Император",
-      imageUrl: "https://drive.google.com/uc?id=1Fl67__ubQJZMmxqtwfyPXuzmUl4mpryr",
+      imageUrl: "https://postimg.cc/G4pF5F3Y",
       title: "Вот Твоя Карта Дня, это - Император",
       description: "карта власти и стабильности. Сегодня время взять ответственность в свои руки и проявить лидерские качества."
     },
     {
       name: "Императрица",
-      imageUrl: "https://drive.google.com/uc?id=1HzRh2iTG7CI2ZRTwvbfd2CAfSOUk9HLz",
+      imageUrl: "https://postimg.cc/75Q385bR",
       title: "Вот Твоя Карта Дня, это - Императрица",
       description: "карта женственности и творчества. Сегодня твоя интуиция и забота помогут создать что-то прекрасное."
     },
     {
       name: "Иерофант",
-      imageUrl: "https://drive.google.com/uc?id=1Thg-zY2EZrS3V349ZKFmiLMQciZRGlCm",
+      imageUrl: "https://postimg.cc/d7k8qJyV",
       title: "Вот Твоя Карта Дня, это - Иерофант",
       description: "карта мудрости и традиций. Сегодня стоит обратиться к проверенным знаниям и советам мудрых людей."
     },
     {
       name: "Влюбленные",
-      imageUrl: "https://drive.google.com/uc?id=15WUuqGgkkTbPdwDJU-xtEzrAfVEhlDbJ",
+      imageUrl: "https://postimg.cc/kV0WGLQF",
       title: "Вот Твоя Карта Дня, это - Влюбленные",
       description: "карта любви и важных выборов. Сегодня слушай свое сердце при принятии решений."
     },
     {
       name: "Колесница",
-      imageUrl: "https://drive.google.com/uc?id=1ArWtJZLA2-dR1q435c41woODwi6zZ_CK",
+      imageUrl: "https://postimg.cc/sGyS9S0M",
       title: "Вот Твоя Карта Дня, это - Колесница",
       description: "карта победы и движения вперед. Сегодня твоя решимость приведет к успеху."
     },
     {
       name: "Сила",
-      imageUrl: "https://drive.google.com/uc?id=1PYY88rCjPj62kdCksJCc1iAbG_1c_kwE",
+      imageUrl: "https://postimg.cc/dkGrynnM",
       title: "Вот Твоя Карта Дня, это - Сила",
       description: "карта внутренней силы и мужества. Сегодня ты способна преодолеть любые препятствия."
     },
     {
       name: "Отшельник",
-      imageUrl: "https://drive.google.com/uc?id=1eVo1mLDemHydoq6MgNkWkUYifWDC-vkZ",
+      imageUrl: "https://postimg.cc/9wp9xMvJ",
       title: "Вот Твоя Карта Дня, это - Отшельник",
       description: "карта самопознания и поиска истины. Сегодня уделите время размышлениям о своем жизненном пути."
     }
