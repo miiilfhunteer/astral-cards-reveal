@@ -15,9 +15,9 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<any[]>([]);
   const [flippingCard, setFlippingCard] = useState<number | null>(null);
-  const [shuffleKey, setShuffleKey] = useState(0); // Для перемешивания колоды
+  const [shuffledIndexes, setShuffledIndexes] = useState<number[]>([]);
 
-  // Новые 78 карт Таро с Google Drive
+  // Новые карты с обновленными ссылками Google Drive
   const allCards = [
     "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
     "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
@@ -78,22 +78,24 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   ];
 
   const cardNames = [
-    "Туз Кубков", "Туз Пентаклей", "Туз Мечей", "Туз Жезлов", "Колесница", "Смерть", "Дьявол",
-    "Восьмерка Кубков", "Восьмерка Пентаклей", "Восьмерка Мечей", "Восьмерка Жезлов", "Император",
-    "Императрица", "Пятерка Кубков", "Пятерка Пентаклей", "Пятерка Мечей", "Пятерка Жезлов", "Шут",
-    "Четверка Кубков", "Четверка Пентаклей", "Четверка Мечей", "Четверка Жезлов", "Повешенный",
-    "Отшельник", "Иерофант", "Верховная Жрица", "Суд", "Справедливость", "Король Кубков",
-    "Король Пентаклей", "Король Мечей", "Король Жезлов", "Рыцарь Кубков", "Рыцарь Пентаклей",
-    "Рыцарь Мечей", "Рыцарь Жезлов", "Влюбленные", "Маг", "Луна", "Девятка Кубков",
-    "Девятка Пентаклей", "Девятка Мечей", "Девятка Жезлов", "Паж Кубков", "Паж Пентаклей",
-    "Паж Мечей", "Паж Жезлов", "Королева Кубков", "Королева Пентаклей", "Королева Мечей",
-    "Королева Жезлов", "Семерка Кубков", "Семерка Пентаклей", "Семерка Мечей", "Семерка Жезлов",
-    "Шестерка Кубков", "Шестерка Пентаклей", "Шестерка Мечей", "Шестерка Жезлов", "Звезда",
-    "Сила", "Солнце", "Умеренность", "Десятка Кубков", "Десятка Пентаклей", "Десятка Мечей",
-    "Десятка Жезлов", "Тройка Кубков", "Тройка Пентаклей", "Тройка Жезлов", "Тройка Мечей",
-    "Башня", "Двойка Кубков", "Двойка Пентаклей", "Двойка Мечей", "Двойка Жезлов",
-    "Колесо Фортуны", "Мир"
+    "Шут", "Маг", "Верховная Жрица", "Император", "Императрица", "Иерофант",
+    "Влюбленные", "Колесница", "Сила", "Отшельник", "Колесо Фортуны", "Справедливость",
+    "Повешенный", "Смерть", "Умеренность", "Дьявол", "Башня", "Звезда", "Луна", "Солнце",
+    "Суд", "Мир", "Туз Жезлов", "Двойка Жезлов", "Тройка Жезлов", "Четверка Жезлов",
+    "Пятерка Жезлов", "Шестерка Жезлов", "Семерка Жезлов", "Восьмерка Жезлов",
+    "Девятка Жезлов", "Десятка Жезлов", "Паж Жезлов", "Рыцарь Жезлов", "Королева Жезлов",
+    "Король Жезлов", "Туз Кубков", "Двойка Кубков", "Тройка Кубков", "Четверка Кубков",
+    "Пятерка Кубков", "Шестерка Кубков", "Семерка Кубков", "Восьмерка Кубков",
+    "Девятка Кубков", "Десятка Кубков", "Паж Кубков", "Рыцарь Кубков", "Королева Кубков",
+    "Король Кубков", "Туз Мечей", "Двойка Мечей", "Тройка Мечей", "Четверка Мечей",
+    "Пятерка Мечей"
   ];
+
+  // Инициализация перемешанных индексов при первой загрузке
+  React.useEffect(() => {
+    const indexes = Array.from({ length: 24 }, (_, i) => Math.floor(Math.random() * allCards.length));
+    setShuffledIndexes(indexes);
+  }, []);
 
   const handleCardClick = (index: number) => {
     if (selectedCards.includes(index) || selectedCards.length >= 3) return;
@@ -105,11 +107,11 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       const newSelectedCards = [...selectedCards, index];
       setSelectedCards(newSelectedCards);
       
-      // Get random card from the available cards
-      const randomCardIndex = Math.floor(Math.random() * allCards.length);
+      // Используем перемешанный индекс для выбора карты
+      const cardIndex = shuffledIndexes[index] || Math.floor(Math.random() * allCards.length);
       const newCard = {
-        image: allCards[randomCardIndex],
-        name: cardNames[randomCardIndex] || `Карта ${randomCardIndex + 1}`
+        image: allCards[cardIndex],
+        name: cardNames[cardIndex] || `Карта ${cardIndex + 1}`
       };
       
       setRevealedCards([...revealedCards, newCard]);
@@ -127,12 +129,15 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     }, 600);
   };
 
-  const handleShuffle = () => {
+  const handleShuffle = (e: React.MouseEvent) => {
+    e.preventDefault();
     // Сброс всех состояний для перемешивания
     setSelectedCards([]);
     setRevealedCards([]);
     setFlippingCard(null);
-    setShuffleKey(prev => prev + 1); // Изменяем ключ для принудительного обновления
+    // Генерируем новые случайные индексы для карт
+    const newIndexes = Array.from({ length: 24 }, (_, i) => Math.floor(Math.random() * allCards.length));
+    setShuffledIndexes(newIndexes);
   };
 
   return (
@@ -148,6 +153,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       <Button
         onClick={handleShuffle}
         className="mb-8 bg-purple-800 hover:bg-purple-700 text-white px-6 py-2 rounded-full"
+        type="button"
       >
         🔄 Перемешать колоду
       </Button>
@@ -160,49 +166,58 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       </div>
 
       {/* Card deck for selection */}
-      <div key={shuffleKey} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 px-4">
-        {Array.from({ length: 24 }, (_, index) => (
-          <div
-            key={index}
-            onClick={() => handleCardClick(index)}
-            className={`relative cursor-pointer transform transition-all duration-300 hover:scale-105 ${
-              selectedCards.includes(index) ? 'opacity-50 scale-95' : ''
-            }`}
-          >
-            <div className="relative w-full aspect-[2/3]">
-              <div
-                className={`w-full h-full rounded-lg shadow-lg border border-golden-400/30 card-flip ${
-                  flippingCard === index ? 'flipping' : ''
-                }`}
-                style={{
-                  perspective: '1000px'
-                }}
-              >
-                {/* Card Back */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 px-4">
+        {Array.from({ length: 24 }, (_, index) => {
+          const isSelected = selectedCards.includes(index);
+          const isFlipping = flippingCard === index;
+          const cardImageIndex = shuffledIndexes[index] || 0;
+          
+          return (
+            <div
+              key={`${index}-${shuffledIndexes.length}`}
+              onClick={() => handleCardClick(index)}
+              className={`relative cursor-pointer transform transition-all duration-300 hover:scale-105 ${
+                isSelected ? 'opacity-50 scale-95' : ''
+              }`}
+            >
+              <div className="relative w-full aspect-[2/3]">
                 <div
-                  className={`w-full h-full rounded-lg transition-transform duration-600 ${
-                    flippingCard === index ? 'rotate-y-180' : ''
-                  }`}
-                  style={{
-                    backgroundImage: flippingCard === index 
-                      ? `url('${allCards[Math.floor(Math.random() * allCards.length)]}')`
-                      : `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    transformStyle: 'preserve-3d'
-                  }}
-                />
-              </div>
-              {selectedCards.includes(index) && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
-                  <span className="text-golden-400 text-2xl md:text-3xl font-bold">
-                    {selectedCards.indexOf(index) + 1}
-                  </span>
+                  className="w-full h-full rounded-lg shadow-lg border border-golden-400/30"
+                  style={{ perspective: '1000px' }}
+                >
+                  <div
+                    className={`w-full h-full rounded-lg transition-transform duration-600 ${
+                      isFlipping ? 'rotate-y-180' : ''
+                    }`}
+                    style={{
+                      transformStyle: 'preserve-3d'
+                    }}
+                  >
+                    {/* Card Back */}
+                    <div
+                      className="absolute inset-0 w-full h-full rounded-lg"
+                      style={{
+                        backgroundImage: isFlipping
+                          ? `url('${allCards[cardImageIndex]}')`
+                          : `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backfaceVisibility: 'hidden'
+                      }}
+                    />
+                  </div>
                 </div>
-              )}
+                {isSelected && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
+                    <span className="text-golden-400 text-2xl md:text-3xl font-bold">
+                      {selectedCards.indexOf(index) + 1}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Selected cards display */}
@@ -223,7 +238,11 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                     className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
                     onError={(e) => {
                       console.log('Image load error for:', card.image);
-                      // Fallback to a backup image if needed
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
+                    }}
+                    onLoad={() => {
+                      console.log('Image loaded successfully:', card.image);
                     }}
                   />
                 </div>

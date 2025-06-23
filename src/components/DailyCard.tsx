@@ -14,7 +14,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [showCTA, setShowCTA] = useState(false);
   const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Карты дня - обновленные ссылки на Google Drive
+  // Новые карты дня с обновленными ссылками
   const dailyCards = [
     {
       name: "Шут",
@@ -33,6 +33,48 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
       imageUrl: "https://drive.google.com/uc?id=1B3-zSdDXESpO67LJ0fZIgKtq2rENc6Rp",
       title: "Вот Твоя Карта Дня, это - Верховная Жрица",
       description: "карта интуиции и скрытых знаний. Сегодня обрати внимание на свой внутренний голос и тайные знаки вокруг, они могут открыть тебе важную истину."
+    },
+    {
+      name: "Император",
+      imageUrl: "https://drive.google.com/uc?id=1Fl67__ubQJZMmxqtwfyPXuzmUl4mpryr",
+      title: "Вот Твоя Карта Дня, это - Император",
+      description: "карта власти и стабильности. Сегодня время взять ответственность в свои руки и проявить лидерские качества."
+    },
+    {
+      name: "Императрица",
+      imageUrl: "https://drive.google.com/uc?id=1HzRh2iTG7CI2ZRTwvbfd2CAfSOUk9HLz",
+      title: "Вот Твоя Карта Дня, это - Императрица",
+      description: "карта женственности и творчества. Сегодня твоя интуиция и забота помогут создать что-то прекрасное."
+    },
+    {
+      name: "Иерофант",
+      imageUrl: "https://drive.google.com/uc?id=1Thg-zY2EZrS3V349ZKFmiLMQciZRGlCm",
+      title: "Вот Твоя Карта Дня, это - Иерофант",
+      description: "карта мудрости и традиций. Сегодня стоит обратиться к проверенным знаниям и советам мудрых людей."
+    },
+    {
+      name: "Влюбленные",
+      imageUrl: "https://drive.google.com/uc?id=15WUuqGgkkTbPdwDJU-xtEzrAfVEhlDbJ",
+      title: "Вот Твоя Карта Дня, это - Влюбленные",
+      description: "карта любви и важных выборов. Сегодня слушай свое сердце при принятии решений."
+    },
+    {
+      name: "Колесница",
+      imageUrl: "https://drive.google.com/uc?id=1ArWtJZLA2-dR1q435c41woODwi6zZ_CK",
+      title: "Вот Твоя Карта Дня, это - Колесница",
+      description: "карта победы и движения вперед. Сегодня твоя решимость приведет к успеху."
+    },
+    {
+      name: "Сила",
+      imageUrl: "https://drive.google.com/uc?id=1PYY88rCjPj62kdCksJCc1iAbG_1c_kwE",
+      title: "Вот Твоя Карта Дня, это - Сила",
+      description: "карта внутренней силы и мужества. Сегодня ты способна преодолеть любые препятствия."
+    },
+    {
+      name: "Отшельник",
+      imageUrl: "https://drive.google.com/uc?id=1eVo1mLDemHydoq6MgNkWkUYifWDC-vkZ",
+      title: "Вот Твоя Карта Дня, это - Отшельник",
+      description: "карта самопознания и поиска истины. Сегодня уделите время размышлениям о своем жизненном пути."
     }
   ];
 
