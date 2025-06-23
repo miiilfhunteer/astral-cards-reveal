@@ -14,23 +14,23 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [showCTA, setShowCTA] = useState(false);
   const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Карты дня - 3 карты для рандома
+  // Карты дня - обновленные ссылки на Google Drive
   const dailyCards = [
     {
       name: "Шут",
-      imageUrl: "https://static.tildacdn.com/tild6564-6365-4839-a538-366265396261/fool_with_label.jpg",
+      imageUrl: "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
       title: "Вот Твоя Карта Дня, это - Шут",
       description: "эта карта символизирует новые начинания и спонтанные решения. Сегодня стоит довериться своей интуиции и сделать шаг в неизвестность, который может привести к удивительным открытиям."
     },
     {
       name: "Маг",
-      imageUrl: "https://static.tildacdn.com/tild3935-6134-4032-a534-396263366162/magician_with_label.jpg",
+      imageUrl: "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
       title: "Вот Твоя Карта Дня, это - Маг",
       description: "карта творческой силы и проявления намерений. Сегодня у тебя есть все необходимые ресурсы, чтобы воплотить свои желания в реальность, просто сосредоточься на своей цели."
     },
     {
       name: "Верховная Жрица",
-      imageUrl: "https://static.tildacdn.com/tild3131-3336-4339-b962-613862393633/high_priestess_with_.jpg",
+      imageUrl: "https://drive.google.com/uc?id=1B3-zSdDXESpO67LJ0fZIgKtq2rENc6Rp",
       title: "Вот Твоя Карта Дня, это - Верховная Жрица",
       description: "карта интуиции и скрытых знаний. Сегодня обрати внимание на свой внутренний голос и тайные знаки вокруг, они могут открыть тебе важную истину."
     }

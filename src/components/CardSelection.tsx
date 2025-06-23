@@ -15,87 +15,66 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<any[]>([]);
   const [flippingCard, setFlippingCard] = useState<number | null>(null);
+  const [shuffleKey, setShuffleKey] = useState(0); // Для перемешивания колоды
 
-  // All 78 tarot card images
+  // Новые 78 карт Таро с Google Drive
   const allCards = [
-    "https://static.tildacdn.com/tild6265-3030-4532-b365-366464653534/ace_of_cups_with_lab.jpg",
-    "https://static.tildacdn.com/tild3832-3335-4431-a433-633066646566/ace_of_pentacles_wit.jpg",
-    "https://static.tildacdn.com/tild6337-3262-4130-b333-646231356536/ace_of_swords_with_l.jpg",
-    "https://static.tildacdn.com/tild6235-3930-4536-b561-336465363439/ace_of_wands_with_la.jpg",
-    "https://static.tildacdn.com/tild3332-3231-4565-a337-353934653633/chariot_with_label.jpg",
-    "https://static.tildacdn.com/tild3634-3062-4365-a234-656665323766/death_with_label.jpg",
-    "https://static.tildacdn.com/tild3133-6538-4162-b061-646461346239/devil_with_label.jpg",
-    "https://static.tildacdn.com/tild6635-3266-4337-b239-353838396330/eight_of_cups_with_l.jpg",
-    "https://static.tildacdn.com/tild3939-3566-4233-a661-646232663265/eight_of_pentacles_w.jpg",
-    "https://static.tildacdn.com/tild6466-3437-4737-a265-353266386339/eight_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3433-4233-b134-353735393763/eight_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3633-3933-4233-b134-353735393763/emperor_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/empress_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/five_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/five_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/five_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/five_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/fool_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/four_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/four_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/four_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/four_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/hanged_man_with_l.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/hermit_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/hierophant_with_l.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/high_priestess_with_.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/judgement_with_la.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/justice_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/king_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/king_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/king_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/king_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/knight_of_cups_wit.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/knight_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/knight_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/knight_of_wands_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/lovers_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/magician_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/moon_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/nine_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/nine_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/nine_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/nine_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/page_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/page_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/page_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/page_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/queen_of_cups_wit.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/queen_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/queen_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/queen_of_wands_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/seven_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/seven_of_pentacles.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/seven_of_swords_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/seven_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/six_of_cups_with_l.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/six_of_pentacles_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/six_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/six_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/star_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/strength_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/sun_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/temperance_with_l.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/ten_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/ten_of_pentacles_w.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/ten_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/ten_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/three_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/three_of_pentacles_w.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/three_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/three_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/tower_with_label.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/two_of_cups_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/two_of_pentacles_wi.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/two_of_swords_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/two_of_wands_with.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/wheel_of_fortune_w.jpg",
-    "https://static.tildacdn.com/tild3933-3933-4233-b134-353735393763/world_with_label.jpg"
+    "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
+    "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
+    "https://drive.google.com/uc?id=1B3-zSdDXESpO67LJ0fZIgKtq2rENc6Rp",
+    "https://drive.google.com/uc?id=1Fl67__ubQJZMmxqtwfyPXuzmUl4mpryr",
+    "https://drive.google.com/uc?id=1HzRh2iTG7CI2ZRTwvbfd2CAfSOUk9HLz",
+    "https://drive.google.com/uc?id=1Thg-zY2EZrS3V349ZKFmiLMQciZRGlCm",
+    "https://drive.google.com/uc?id=15WUuqGgkkTbPdwDJU-xtEzrAfVEhlDbJ",
+    "https://drive.google.com/uc?id=1ArWtJZLA2-dR1q435c41woODwi6zZ_CK",
+    "https://drive.google.com/uc?id=1PYY88rCjPj62kdCksJCc1iAbG_1c_kwE",
+    "https://drive.google.com/uc?id=1eVo1mLDemHydoq6MgNkWkUYifWDC-vkZ",
+    "https://drive.google.com/uc?id=17HyrjPkiZZUZM2Rnv2ELdPgu59D_zHeq",
+    "https://drive.google.com/uc?id=1J9N2rfjcp1XGA2Qoq2ghzMyimDDfuGcp",
+    "https://drive.google.com/uc?id=1c40LjHcEQsnz8Tl3UYU2aedR2GYw822L",
+    "https://drive.google.com/uc?id=1zW9vPXg2kQ22ro4PNiYjyDign75Hw1Sb",
+    "https://drive.google.com/uc?id=1ND74nGBVFLKWt3jjVQzaaremcxXDgJk8",
+    "https://drive.google.com/uc?id=1Z990yR_sH746ovvRSo8VMmFKM7kHY2tc",
+    "https://drive.google.com/uc?id=1ewnU_8RZQ2TYWho7Tp_-q1Nvm55goLYN",
+    "https://drive.google.com/uc?id=1fdwlAWy8duGzNebCTmWy8bAs7JszPh9b",
+    "https://drive.google.com/uc?id=1tg_iwMuwzCEhyNF7NjJniciDaJfQ6Tdi",
+    "https://drive.google.com/uc?id=19uvzq5YXn4imKP295JykSZdiW7PrLl3s",
+    "https://drive.google.com/uc?id=1DPSLl67Akv5ppBTMYLIqRhDH9OJ9H8Ko",
+    "https://drive.google.com/uc?id=1Ss_pI2AEHTSGH8zmIz6SjUA0-oeH8dSo",
+    "https://drive.google.com/uc?id=1hbHmv1qrw0W8UJysdEU0DeyrVTZGmmce",
+    "https://drive.google.com/uc?id=1J4QddBrivw3qQy84dDaEfLtwqQ9iZWav",
+    "https://drive.google.com/uc?id=1T3vUpX3IK970cZ5vcv1w0vv0wy_Duo10",
+    "https://drive.google.com/uc?id=1tMx5lU35MsROk8cV3Fd7ucOTqn3NGFov",
+    "https://drive.google.com/uc?id=1x9rqCu8CRJqz8-Vp6bl_jQl9L5INJlMB",
+    "https://drive.google.com/uc?id=1NaPLygJKvxINfBIzmf4sgLl6XteIHKwA",
+    "https://drive.google.com/uc?id=1WwAGPblbTK_08FfsZS7u2TX6kDjUxksu",
+    "https://drive.google.com/uc?id=1d8A4fAmbPJLkfGIeJa3xERXo5b2rLhCg",
+    "https://drive.google.com/uc?id=1kDz06viMvWWkblozXYuqo1razBvOa_JB",
+    "https://drive.google.com/uc?id=1n2p07oh3tJ69fI_UgLG-hmrYirTfCP5p",
+    "https://drive.google.com/uc?id=10xWO3uHhpZ5BOJ7pmIpGsTfMgXXcvVvT",
+    "https://drive.google.com/uc?id=16fI1vp5AosW2vb6VOfUmbxf7s3Y8Xbb4",
+    "https://drive.google.com/uc?id=1JF4nwYjAzactJ_-IcMtt1rPSY5X1RNo4",
+    "https://drive.google.com/uc?id=1lhFBpRSwpZ-IpoFaYN9MlXFBtNELRkGL",
+    "https://drive.google.com/uc?id=1MsC9VEqQpntypu1l5hm2D-pyESo83W4-",
+    "https://drive.google.com/uc?id=1d4igjWKD4Oe8HRYMQIvjfD1iBlPa8Pkv",
+    "https://drive.google.com/uc?id=1ghsRXn2tN8SHsYBUlwkwaw6rM8zBVhtf",
+    "https://drive.google.com/uc?id=1lRidvC9WAauknKQH1e41pmxExV3LokBh",
+    "https://drive.google.com/uc?id=1HeGI8Rj727EZq6vacY3NBGM0byya7yH",
+    "https://drive.google.com/uc?id=1lioOz0pGBFRZHDgOFTSwzTZIv2HSeirR",
+    "https://drive.google.com/uc?id=1pUjMgtsmZHEbdpF8lbctPUKD3uWUwmI-",
+    "https://drive.google.com/uc?id=1qsp7pHy90liEpHp8nz35wPYUGcJ3C0vg",
+    "https://drive.google.com/uc?id=1sVPduSxem9Q-s3S1WRtLwsTm8XMBRZCn",
+    "https://drive.google.com/uc?id=1-9wwv_tvFY81Hx_8vyA5ppqUnt2VK7LC",
+    "https://drive.google.com/uc?id=1CuL1CyGrnpsqa9f_SqdTwXpQKbPi1e5h",
+    "https://drive.google.com/uc?id=1ph7gQmYOlX8WXU0mgZWGIb_eAH41fftA",
+    "https://drive.google.com/uc?id=1rXpP0PMTKmWzCMrNNiBGV1DzWWBUVLNG",
+    "https://drive.google.com/uc?id=1EU9VVovCz-VgV8LzMjnZWWZ3ZO0fjLvh",
+    "https://drive.google.com/uc?id=1gGdyjObN_fRNVkdcQnSlWXRvMyH_OJRU",
+    "https://drive.google.com/uc?id=1jfqjd4kiD5yFJ5mT9s1ZcEdRbcP6FVmx",
+    "https://drive.google.com/uc?id=1oelonzVyzn7EGrfphL2NqFxF6CQOfaiR",
+    "https://drive.google.com/uc?id=1G2UdCDHqLvRNdf7e7MqPauV07xK9M3HO",
+    "https://drive.google.com/uc?id=1LqexLW88QrNTEx2wfUKLkDwvTbw-sHUL",
+    "https://drive.google.com/uc?id=1gWuZdwolfu4SHIqpjJsVA3fkZRbMWlpN"
   ];
 
   const cardNames = [
@@ -126,7 +105,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       const newSelectedCards = [...selectedCards, index];
       setSelectedCards(newSelectedCards);
       
-      // Get random card from the 78 cards
+      // Get random card from the available cards
       const randomCardIndex = Math.floor(Math.random() * allCards.length);
       const newCard = {
         image: allCards[randomCardIndex],
@@ -145,7 +124,15 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
           });
         }, 1000);
       }
-    }, 600); // Время анимации переворачивания
+    }, 600);
+  };
+
+  const handleShuffle = () => {
+    // Сброс всех состояний для перемешивания
+    setSelectedCards([]);
+    setRevealedCards([]);
+    setFlippingCard(null);
+    setShuffleKey(prev => prev + 1); // Изменяем ключ для принудительного обновления
   };
 
   return (
@@ -159,7 +146,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
       {/* Shuffle button */}
       <Button
-        onClick={() => window.location.reload()}
+        onClick={handleShuffle}
         className="mb-8 bg-purple-800 hover:bg-purple-700 text-white px-6 py-2 rounded-full"
       >
         🔄 Перемешать колоду
@@ -173,7 +160,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       </div>
 
       {/* Card deck for selection */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 px-4">
+      <div key={shuffleKey} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 px-4">
         {Array.from({ length: 24 }, (_, index) => (
           <div
             key={index}
@@ -188,11 +175,24 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                   flippingCard === index ? 'flipping' : ''
                 }`}
                 style={{
-                  backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
+                  perspective: '1000px'
                 }}
-              />
+              >
+                {/* Card Back */}
+                <div
+                  className={`w-full h-full rounded-lg transition-transform duration-600 ${
+                    flippingCard === index ? 'rotate-y-180' : ''
+                  }`}
+                  style={{
+                    backgroundImage: flippingCard === index 
+                      ? `url('${allCards[Math.floor(Math.random() * allCards.length)]}')`
+                      : `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    transformStyle: 'preserve-3d'
+                  }}
+                />
+              </div>
               {selectedCards.includes(index) && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
                   <span className="text-golden-400 text-2xl md:text-3xl font-bold">
@@ -221,6 +221,10 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                     src={card.image}
                     alt={card.name}
                     className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
+                    onError={(e) => {
+                      console.log('Image load error for:', card.image);
+                      // Fallback to a backup image if needed
+                    }}
                   />
                 </div>
                 <div className="text-golden-400 font-medium text-xs sm:text-sm md:text-base leading-tight whitespace-normal max-w-24 xs:max-w-28 sm:max-w-32 md:max-w-40 lg:max-w-48 mx-auto">
