@@ -17,7 +17,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [flippingCard, setFlippingCard] = useState<number | null>(null);
   const [shuffledIndexes, setShuffledIndexes] = useState<number[]>([]);
 
-  // Новые карты с обновленными ссылками Google Drive
+  // Новые карты с обновленными ссылками Google Drive (все 53 карты)
   const allCards = [
     "https://drive.google.com/uc?id=1tyng1l4Gh2g-jZUVOdxHDU2GJn5KjrW6",
     "https://drive.google.com/uc?id=1ySurbO0GtzmuncuaxHJHK21axa1u_sn-",
@@ -93,12 +93,16 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
   // Инициализация перемешанных индексов при первой загрузке
   React.useEffect(() => {
+    console.log('CardSelection: Initializing shuffled indexes');
     const indexes = Array.from({ length: 24 }, (_, i) => Math.floor(Math.random() * allCards.length));
+    console.log('CardSelection: Generated shuffled indexes:', indexes);
     setShuffledIndexes(indexes);
   }, []);
 
   const handleCardClick = (index: number) => {
     if (selectedCards.includes(index) || selectedCards.length >= 3) return;
+    
+    console.log('CardSelection: Card clicked at index:', index);
     
     // Анимация переворачивания карты
     setFlippingCard(index);
@@ -109,9 +113,14 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       
       // Используем перемешанный индекс для выбора карты
       const cardIndex = shuffledIndexes[index] || Math.floor(Math.random() * allCards.length);
+      const cardImage = allCards[cardIndex];
+      const cardName = cardNames[cardIndex] || `Карта ${cardIndex + 1}`;
+      
+      console.log('CardSelection: Selected card:', { cardIndex, cardImage, cardName });
+      
       const newCard = {
-        image: allCards[cardIndex],
-        name: cardNames[cardIndex] || `Карта ${cardIndex + 1}`
+        image: cardImage,
+        name: cardName
       };
       
       setRevealedCards([...revealedCards, newCard]);
@@ -129,14 +138,17 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     }, 600);
   };
 
-  const handleShuffle = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleShuffle = () => {
+    console.log('CardSelection: Shuffling deck');
+    
     // Сброс всех состояний для перемешивания
     setSelectedCards([]);
     setRevealedCards([]);
     setFlippingCard(null);
+    
     // Генерируем новые случайные индексы для карт
     const newIndexes = Array.from({ length: 24 }, (_, i) => Math.floor(Math.random() * allCards.length));
+    console.log('CardSelection: New shuffled indexes:', newIndexes);
     setShuffledIndexes(newIndexes);
   };
 
@@ -193,18 +205,38 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                       transformStyle: 'preserve-3d'
                     }}
                   >
-                    {/* Card Back */}
+                    {/* Card Back (или фронт после переворота) */}
                     <div
                       className="absolute inset-0 w-full h-full rounded-lg"
                       style={{
-                        backgroundImage: isFlipping
-                          ? `url('${allCards[cardImageIndex]}')`
-                          : `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
                         backfaceVisibility: 'hidden'
                       }}
-                    />
+                    >
+                      {isFlipping && isSelected ? (
+                        <img
+                          src={allCards[cardImageIndex]}
+                          alt={cardNames[cardImageIndex] || 'Карта Таро'}
+                          className="w-full h-full object-cover rounded-lg"
+                          onLoad={() => {
+                            console.log('CardSelection: Card flip image loaded:', allCards[cardImageIndex]);
+                          }}
+                          onError={(e) => {
+                            console.error('CardSelection: Card flip image error:', allCards[cardImageIndex]);
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
+                          }}
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full rounded-lg"
+                          style={{
+                            backgroundImage: `url('https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
                 {isSelected && (
@@ -237,12 +269,12 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                     alt={card.name}
                     className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
                     onError={(e) => {
-                      console.log('Image load error for:', card.image);
+                      console.error('CardSelection: Selected card image error for:', card.image);
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
                     }}
                     onLoad={() => {
-                      console.log('Image loaded successfully:', card.image);
+                      console.log('CardSelection: Selected card image loaded successfully:', card.image);
                     }}
                   />
                 </div>

@@ -14,7 +14,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [showCTA, setShowCTA] = useState(false);
   const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Новые карты дня с обновленными ссылками
+  // Новые карты с обновленными ссылками Google Drive
   const dailyCards = [
     {
       name: "Шут",
@@ -81,6 +81,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   useEffect(() => {
     // Выбираем случайную карту при загрузке
     const randomCard = dailyCards[Math.floor(Math.random() * dailyCards.length)];
+    console.log('DailyCard: Selected random card:', randomCard);
     setSelectedCard(randomCard);
     
     // Автоматически начинаем процесс при загрузке компонента
@@ -94,6 +95,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
 
   const handleCardClick = () => {
     if (step === 'revealing') {
+      console.log('DailyCard: Card clicked, revealing card');
       // Play flip sound if enabled
       if (soundEnabled) {
         const audio = new Audio('/sounds/card-flip.mp3');
@@ -170,12 +172,22 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             <div 
               className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 rotate-y-180"
               style={{ 
-                backfaceVisibility: 'hidden',
-                backgroundImage: `url('${selectedCard.imageUrl}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backfaceVisibility: 'hidden'
               }}
             >
+              <img
+                src={selectedCard.imageUrl}
+                alt={selectedCard.name}
+                className="w-full h-full object-cover rounded-2xl"
+                onLoad={() => {
+                  console.log('DailyCard: Image loaded successfully:', selectedCard.imageUrl);
+                }}
+                onError={(e) => {
+                  console.error('DailyCard: Image load error for:', selectedCard.imageUrl);
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
+                }}
+              />
             </div>
           </div>
         </div>
