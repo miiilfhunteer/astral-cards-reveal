@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -13,7 +14,7 @@ interface CardSelectionProps {
 export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComplete }) => {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<any[]>([]);
-  const [flippingCard, setFlippingCard] = useState<number | null>(null);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [shuffledIndexes, setShuffledIndexes] = useState<number[]>([]);
 
   // Прямые ссылки на изображения карт Таро высокого качества
@@ -73,7 +74,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     "https://i.postimg.cc/4YCKzp7s/52.jpg", // Тройка Мечей
     "https://i.postimg.cc/sMpMK17S/53.jpg", // Четверка Мечей
     "https://i.postimg.cc/sBsvLy4L/54.jpg", // Пятерка Мечей
-    "https://i.postimg.cc/cKhryjDL/55.jpg"  // Дополнительная карта
+    "https://i.postimg.cc/cKhryjDL/55.jpg"  // Шестерка Мечей
   ];
 
   const cardNames = [
@@ -87,7 +88,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     "Пятерка Кубков", "Шестерка Кубков", "Семерка Кубков", "Восьмерка Кубков",
     "Девятка Кубков", "Десятка Кубков", "Паж Кубков", "Рыцарь Кубков", "Королева Кубков",
     "Король Кубков", "Туз Мечей", "Двойка Мечей", "Тройка Мечей", "Четверка Мечей",
-    "Пятерка Мечей", "Дополнительная карта"
+    "Пятерка Мечей", "Шестерка Мечей"
   ];
 
   // Инициализация перемешанных индексов при первой загрузке
@@ -103,27 +104,27 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     
     console.log('CardSelection: Card clicked at index:', index);
     
-    // Анимация переворачивания карты
-    setFlippingCard(index);
+    // Добавляем карту к перевернутым для анимации
+    setFlippedCards(prev => [...prev, index]);
     
     setTimeout(() => {
       const newSelectedCards = [...selectedCards, index];
       setSelectedCards(newSelectedCards);
       
       // Используем перемешанный индекс для выбора карты
-      const cardIndex = shuffledIndexes[index] || Math.floor(Math.random() * allCards.length);
+      const cardIndex = shuffledIndexes[index];
       const cardImage = allCards[cardIndex];
-      const cardName = cardNames[cardIndex] || `Карта ${cardIndex + 1}`;
+      const cardName = cardNames[cardIndex];
       
       console.log('CardSelection: Selected card:', { cardIndex, cardImage, cardName });
       
       const newCard = {
         image: cardImage,
-        name: cardName
+        name: cardName,
+        index: cardIndex
       };
       
       setRevealedCards([...revealedCards, newCard]);
-      setFlippingCard(null);
       
       // If all 3 cards are selected, scroll to bottom
       if (newSelectedCards.length === 3) {
@@ -143,7 +144,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     // Сброс всех состояний для перемешивания
     setSelectedCards([]);
     setRevealedCards([]);
-    setFlippingCard(null);
+    setFlippedCards([]);
     
     // Генерируем новые случайные индексы для карт
     const newIndexes = Array.from({ length: 24 }, (_, i) => Math.floor(Math.random() * allCards.length));
@@ -180,7 +181,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 px-4">
         {Array.from({ length: 24 }, (_, index) => {
           const isSelected = selectedCards.includes(index);
-          const isFlipping = flippingCard === index;
+          const isFlipped = flippedCards.includes(index);
           const cardImageIndex = shuffledIndexes[index] || 0;
           
           return (
@@ -198,7 +199,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                 >
                   <div
                     className={`w-full h-full rounded-lg transition-transform duration-600 ${
-                      isFlipping ? 'rotate-y-180' : ''
+                      isFlipped ? 'rotate-y-180' : ''
                     }`}
                     style={{
                       transformStyle: 'preserve-3d'
@@ -221,7 +222,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                       />
                     </div>
                     
-                    {/* Card Front (показывается после переворота) */}
+                    {/* Card Front - остается перевернутой после клика */}
                     <div
                       className="absolute inset-0 w-full h-full rounded-lg rotate-y-180"
                       style={{
