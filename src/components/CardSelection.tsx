@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -17,63 +16,64 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   const [flippingCard, setFlippingCard] = useState<number | null>(null);
   const [shuffledIndexes, setShuffledIndexes] = useState<number[]>([]);
 
-  // Обновленные карты с новыми ссылками postimg.cc (все 55 карт)
+  // Прямые ссылки на изображения карт Таро высокого качества
   const allCards = [
-    "https://postimg.cc/4nzQ74FK", // Шут
-    "https://postimg.cc/F7Ngjt2T", // Маг
-    "https://postimg.cc/Tp0j07xf", // Верховная Жрица
-    "https://postimg.cc/G4pF5F3Y", // Император
-    "https://postimg.cc/75Q385bR", // Императрица
-    "https://postimg.cc/d7k8qJyV", // Иерофант
-    "https://postimg.cc/kV0WGLQF", // Влюбленные
-    "https://postimg.cc/sGyS9S0M", // Колесница
-    "https://postimg.cc/dkGrynnM", // Сила
-    "https://postimg.cc/9wp9xMvJ", // Отшельник
-    "https://postimg.cc/MXbrkYwr", // Колесо Фортуны
-    "https://postimg.cc/6TN11mkv", // Справедливость
-    "https://postimg.cc/zVz2qRXD", // Повешенный
-    "https://postimg.cc/hf2yvPfL", // Смерть
-    "https://postimg.cc/jW7ZMHvc", // Умеренность
-    "https://postimg.cc/k2Djb3bk", // Дьявол
-    "https://postimg.cc/K1V07q74", // Башня
-    "https://postimg.cc/NLYpxrX8", // Звезда
-    "https://postimg.cc/hQSs4HnZ", // Луна
-    "https://postimg.cc/phQkHPwn", // Солнце
-    "https://postimg.cc/hzRM6X5B", // Суд
-    "https://postimg.cc/4n5w2NvD", // Мир
-    "https://postimg.cc/SJxdBFDJ", // Туз Жезлов
-    "https://postimg.cc/qNtL7cfr", // Двойка Жезлов
-    "https://postimg.cc/56Kg17Rp", // Тройка Жезлов
-    "https://postimg.cc/FY2xkfmL", // Четверка Жезлов
-    "https://postimg.cc/mcCyYb26", // Пятерка Жезлов
-    "https://postimg.cc/G8RJzZ43", // Шестерка Жезлов
-    "https://postimg.cc/vgv7K3nr", // Семерка Жезлов
-    "https://postimg.cc/kRXNPKNk", // Восьмерка Жезлов
-    "https://postimg.cc/s1V4WCFw", // Девятка Жезлов
-    "https://postimg.cc/RqXQQp49", // Десятка Жезлов
-    "https://postimg.cc/Tp1jkj3b", // Паж Жезлов
-    "https://postimg.cc/3dqXzykc", // Рыцарь Жезлов
-    "https://postimg.cc/Yvm67pgq", // Королева Жезлов
-    "https://postimg.cc/v1FWHpL7", // Король Жезлов
-    "https://postimg.cc/jWHyWZZp", // Туз Кубков
-    "https://postimg.cc/YG8gRjc8", // Двойка Кубков
-    "https://postimg.cc/8f5v0DNG", // Тройка Кубков
-    "https://postimg.cc/xqxMbk31", // Четверка Кубков
-    "https://postimg.cc/3WJ2Rjpq", // Пятерка Кубков
-    "https://postimg.cc/JGsJ31pc", // Шестерка Кубков
-    "https://postimg.cc/mPMHqmfP", // Семерка Кубков
-    "https://postimg.cc/JGSXP9gw", // Восьмерка Кубков
-    "https://postimg.cc/Y4HWwQMb", // Девятка Кубков
-    "https://postimg.cc/7CnTPbLD", // Десятка Кубков
-    "https://postimg.cc/mzZ1PRc9", // Паж Кубков
-    "https://postimg.cc/tZrZPfPM", // Рыцарь Кубков
-    "https://postimg.cc/9wr4BpYF", // Королева Кубков
-    "https://postimg.cc/RqFn9Sx5", // Король Кубков
-    "https://postimg.cc/Jt2HzfRy", // Туз Мечей
-    "https://postimg.cc/crtggFJF", // Двойка Мечей
-    "https://postimg.cc/4YCKzp7s", // Тройка Мечей
-    "https://postimg.cc/sMpMK17S", // Четверка Мечей
-    "https://postimg.cc/sBsvLy4L"  // Пятерка Мечей
+    "https://i.postimg.cc/4nzQ74FK/0.jpg", // Шут
+    "https://i.postimg.cc/F7Ngjt2T/1.jpg", // Маг
+    "https://i.postimg.cc/Tp0j07xf/2.jpg", // Верховная Жрица
+    "https://i.postimg.cc/G4pF5F3Y/3.jpg", // Император
+    "https://i.postimg.cc/75Q385bR/4.jpg", // Императрица
+    "https://i.postimg.cc/d7k8qJyV/5.jpg", // Иерофант
+    "https://i.postimg.cc/kV0WGLQF/6.jpg", // Влюбленные
+    "https://i.postimg.cc/sGyS9S0M/7.jpg", // Колесница
+    "https://i.postimg.cc/dkGrynnM/8.jpg", // Сила
+    "https://i.postimg.cc/9wp9xMvJ/9.jpg", // Отшельник
+    "https://i.postimg.cc/MXbrkYwr/10.jpg", // Колесо Фортуны
+    "https://i.postimg.cc/6TN11mkv/11.jpg", // Справедливость
+    "https://i.postimg.cc/zVz2qRXD/12.jpg", // Повешенный
+    "https://i.postimg.cc/hf2yvPfL/13.jpg", // Смерть
+    "https://i.postimg.cc/jW7ZMHvc/14.jpg", // Умеренность
+    "https://i.postimg.cc/k2Djb3bk/15.jpg", // Дьявол
+    "https://i.postimg.cc/K1V07q74/16.jpg", // Башня
+    "https://i.postimg.cc/NLYpxrX8/17.jpg", // Звезда
+    "https://i.postimg.cc/hQSs4HnZ/18.jpg", // Луна
+    "https://i.postimg.cc/phQkHPwn/19.jpg", // Солнце
+    "https://i.postimg.cc/hzRM6X5B/20.jpg", // Суд
+    "https://i.postimg.cc/4n5w2NvD/21.jpg", // Мир
+    "https://i.postimg.cc/SJxdBFDJ/22.jpg", // Туз Жезлов
+    "https://i.postimg.cc/qNtL7cfr/23.jpg", // Двойка Жезлов
+    "https://i.postimg.cc/56Kg17Rp/24.jpg", // Тройка Жезлов
+    "https://i.postimg.cc/FY2xkfmL/25.jpg", // Четверка Жезлов
+    "https://i.postimg.cc/mcCyYb26/26.jpg", // Пятерка Жезлов
+    "https://i.postimg.cc/G8RJzZ43/27.jpg", // Шестерка Жезлов
+    "https://i.postimg.cc/vgv7K3nr/28.jpg", // Семерка Жезлов
+    "https://i.postimg.cc/kRXNPKNk/29.jpg", // Восьмерка Жезлов
+    "https://i.postimg.cc/s1V4WCFw/30.jpg", // Девятка Жезлов
+    "https://i.postimg.cc/RqXQQp49/31.jpg", // Десятка Жезлов
+    "https://i.postimg.cc/Tp1jkj3b/32.jpg", // Паж Жезлов
+    "https://i.postimg.cc/3dqXzykc/33.jpg", // Рыцарь Жезлов
+    "https://i.postimg.cc/Yvm67pgq/34.jpg", // Королева Жезлов
+    "https://i.postimg.cc/v1FWHpL7/35.jpg", // Король Жезлов
+    "https://i.postimg.cc/jWHyWZZp/36.jpg", // Туз Кубков
+    "https://i.postimg.cc/YG8gRjc8/37.jpg", // Двойка Кубков
+    "https://i.postimg.cc/8f5v0DNG/38.jpg", // Тройка Кубков
+    "https://i.postimg.cc/xqxMbk31/39.jpg", // Четверка Кубков
+    "https://i.postimg.cc/3WJ2Rjpq/40.jpg", // Пятерка Кубков
+    "https://i.postimg.cc/JGsJ31pc/41.jpg", // Шестерка Кубков
+    "https://i.postimg.cc/mPMHqmfP/42.jpg", // Семерка Кубков
+    "https://i.postimg.cc/JGSXP9gw/43.jpg", // Восьмерка Кубков
+    "https://i.postimg.cc/Y4HWwQMb/44.jpg", // Девятка Кубков
+    "https://i.postimg.cc/7CnTPbLD/45.jpg", // Десятка Кубков
+    "https://i.postimg.cc/mzZ1PRc9/46.jpg", // Паж Кубков
+    "https://i.postimg.cc/tZrZPfPM/47.jpg", // Рыцарь Кубков
+    "https://i.postimg.cc/9wr4BpYF/48.jpg", // Королева Кубков
+    "https://i.postimg.cc/RqFn9Sx5/49.jpg", // Король Кубков
+    "https://i.postimg.cc/Jt2HzfRy/50.jpg", // Туз Мечей
+    "https://i.postimg.cc/crtggFJF/51.jpg", // Двойка Мечей
+    "https://i.postimg.cc/4YCKzp7s/52.jpg", // Тройка Мечей
+    "https://i.postimg.cc/sMpMK17S/53.jpg", // Четверка Мечей
+    "https://i.postimg.cc/sBsvLy4L/54.jpg", // Пятерка Мечей
+    "https://i.postimg.cc/cKhryjDL/55.jpg"  // Дополнительная карта
   ];
 
   const cardNames = [
@@ -87,7 +87,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     "Пятерка Кубков", "Шестерка Кубков", "Семерка Кубков", "Восьмерка Кубков",
     "Девятка Кубков", "Десятка Кубков", "Паж Кубков", "Рыцарь Кубков", "Королева Кубков",
     "Король Кубков", "Туз Мечей", "Двойка Мечей", "Тройка Мечей", "Четверка Мечей",
-    "Пятерка Мечей"
+    "Пятерка Мечей", "Дополнительная карта"
   ];
 
   // Инициализация перемешанных индексов при первой загрузке

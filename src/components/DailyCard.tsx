@@ -13,7 +13,7 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
   const [showCTA, setShowCTA] = useState(false);
   const [selectedCard, setSelectedCard] = useState<any>(null);
 
-  // Обновленные карты с новыми ссылками postimg.cc
+  // Прямые ссылки на изображения высокого качества
   const dailyCards = [
     {
       name: "Шут",
