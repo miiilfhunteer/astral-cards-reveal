@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -124,7 +123,11 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
         index: cardIndex
       };
       
-      setRevealedCards([...revealedCards, newCard]);
+      // Обновляем массив выбранных карт правильно
+      const updatedRevealedCards = [...revealedCards, newCard];
+      setRevealedCards(updatedRevealedCards);
+      
+      console.log('CardSelection: Updated revealed cards:', updatedRevealedCards);
       
       // If all 3 cards are selected, scroll to bottom
       if (newSelectedCards.length === 3) {
