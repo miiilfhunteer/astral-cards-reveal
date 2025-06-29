@@ -305,22 +305,26 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
         })}
       </div>
 
-      {/* Selected cards display */}
+      {/* Selected cards display - улучшенное качество */}
       {selectedCards.length === 3 && (
         <div className="mt-12 px-4">
           <h3 className="text-xl md:text-2xl font-light text-golden-400 mb-8 text-center">
             Судьба приготовила тебе такие карты:
           </h3>
           
-          {/* Горизонтальное отображение карт */}
+          {/* Горизонтальное отображение карт с улучшенным качеством */}
           <div className="flex justify-center items-start gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 max-w-full mx-auto overflow-x-auto">
             {revealedCards.map((card, index) => (
               <div key={index} className="text-center flex-shrink-0">
-                <div className="w-24 h-36 xs:w-28 xs:h-42 sm:w-32 sm:h-48 md:w-40 md:h-60 lg:w-48 lg:h-72 mx-auto mb-3">
+                <div className="w-24 h-36 xs:w-28 xs:h-42 sm:w-32 sm:h-48 md:w-40 md:h-60 lg:w-48 lg:h-72 mx-auto mb-3 bg-black rounded-lg overflow-hidden">
                   <img
                     src={card.image}
                     alt={card.name}
-                    className="w-full h-full object-cover rounded-lg shadow-lg border border-golden-400/30"
+                    className="w-full h-full object-contain shadow-lg border border-golden-400/30 rounded-lg"
+                    style={{
+                      imageRendering: 'high-quality',
+                      imageRendering: '-webkit-optimize-contrast'
+                    }}
                     onError={(e) => {
                       console.error('CardSelection: Selected card image error for:', card.image);
                       const target = e.target as HTMLImageElement;

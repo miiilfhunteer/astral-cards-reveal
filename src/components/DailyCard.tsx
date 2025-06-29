@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
@@ -167,9 +168,9 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
             >
             </div>
             
-            {/* Card Front */}
+            {/* Card Front - улучшенное качество */}
             <div 
-              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 rotate-y-180"
+              className="absolute inset-0 w-full h-full rounded-2xl shadow-2xl border border-golden-400/30 rotate-y-180 overflow-hidden"
               style={{ 
                 backfaceVisibility: 'hidden'
               }}
@@ -177,7 +178,11 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
               <img
                 src={selectedCard.imageUrl}
                 alt={selectedCard.name}
-                className="w-full h-full object-cover rounded-2xl"
+                className="w-full h-full object-contain bg-black rounded-2xl"
+                style={{
+                  imageRendering: 'high-quality',
+                  imageRendering: '-webkit-optimize-contrast'
+                }}
                 onLoad={() => {
                   console.log('DailyCard: Image loaded successfully:', selectedCard.imageUrl);
                 }}
