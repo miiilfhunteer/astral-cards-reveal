@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { DailyCard } from '@/components/DailyCard';
 import { PersonalReading } from '@/components/PersonalReading';
+import { Footer } from '@/components/Footer';
 
 const Index = () => {
   const [showPersonalReading, setShowPersonalReading] = useState(false);
@@ -85,6 +85,9 @@ const Index = () => {
       {showPersonalReading && (
         <PersonalReading />
       )}
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
