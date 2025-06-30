@@ -322,7 +322,6 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
                     alt={card.name}
                     className="w-full h-full object-contain shadow-lg border border-golden-400/30 rounded-lg"
                     style={{
-                      imageRendering: 'high-quality',
                       imageRendering: '-webkit-optimize-contrast'
                     }}
                     onError={(e) => {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX } from 'lucide-react';
@@ -180,7 +179,6 @@ export const DailyCard: React.FC<DailyCardProps> = ({ onRevealed, onPersonalRead
                 alt={selectedCard.name}
                 className="w-full h-full object-contain bg-black rounded-2xl"
                 style={{
-                  imageRendering: 'high-quality',
                   imageRendering: '-webkit-optimize-contrast'
                 }}
                 onLoad={() => {
