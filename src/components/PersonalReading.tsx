@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,12 +9,14 @@ import { CardSelection } from '@/components/CardSelection';
 import { Heart, DollarSign, User, Sparkles } from 'lucide-react';
 
 export const PersonalReading = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState('form'); // form, selection, payment, result
   const [formData, setFormData] = useState({
     name: '',
     age: '',
     topic: ''
   });
+  const [selectedCards, setSelectedCards] = useState<any[]>([]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +32,8 @@ export const PersonalReading = () => {
     }
   };
 
-  const handleCardSelectionComplete = () => {
+  const handleCardSelectionComplete = (cards: any[]) => {
+    setSelectedCards(cards);
     setStep('payment');
     // Scroll to payment section
     setTimeout(() => {
@@ -38,6 +42,16 @@ export const PersonalReading = () => {
         paymentSection.scrollIntoView({ behavior: 'smooth' });
       }
     }, 300);
+  };
+
+  const handleGetReading = () => {
+    // Переходим на страницу результата с данными
+    navigate('/reading-result', {
+      state: {
+        formData,
+        selectedCards
+      }
+    });
   };
 
   const topics = [
@@ -149,7 +163,10 @@ export const PersonalReading = () => {
               <p className="text-purple-200 mb-6 text-sm md:text-base leading-relaxed">
                 Ваш Персональный расклад почти готов, пожалуйста, совершите оплату для продолжения, стоимость расклада: <span className="text-golden-400 text-lg font-medium">400 грн.</span>
               </p>
-              <Button className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight">
+              <Button 
+                onClick={handleGetReading}
+                className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight"
+              >
                 Получить Персональный Расклад
               </Button>
               <p className="text-purple-400 text-xs mt-4">

@@ -349,7 +349,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
           </div>
 
           <Button
-            onClick={onComplete}
+            onClick={() => onComplete(revealedCards)}
             className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-xs sm:text-sm md:text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-4 leading-tight"
           >
             <span className="break-words">Получить Персональный Расклад</span>
