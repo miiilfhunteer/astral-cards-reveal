@@ -1,15 +1,13 @@
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CardSelection } from '@/components/CardSelection';
+import { ReadingModal } from '@/components/ReadingModal';
 import { Heart, DollarSign, User, Sparkles } from 'lucide-react';
 
 export const PersonalReading = () => {
-  const navigate = useNavigate();
   const [step, setStep] = useState('form'); // form, selection, payment, result
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +15,7 @@ export const PersonalReading = () => {
     topic: ''
   });
   const [selectedCards, setSelectedCards] = useState<any[]>([]);
+  const [showReadingModal, setShowReadingModal] = useState(false);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +44,8 @@ export const PersonalReading = () => {
   };
 
   const handleGetReading = () => {
-    // Переходим на страницу результата с данными
-    navigate('/reading-result', {
-      state: {
-        formData,
-        selectedCards
-      }
-    });
+    // Показываем поп-ап с раскладом
+    setShowReadingModal(true);
   };
 
   const topics = [
@@ -62,120 +56,130 @@ export const PersonalReading = () => {
   ];
 
   return (
-    <section className="py-20 px-4 relative">
-      <div className="max-w-4xl mx-auto">
-        
-        {step === 'form' && (
-          <div id="personal-reading-form" className="text-center">
-            <h2 className="text-2xl md:text-4xl font-light text-golden-400 mb-8">
-              Персональный расклад
-            </h2>
-            <p className="text-lg md:text-xl text-purple-200 mb-12 px-4">
-              Расскажи немного о себе, чтобы карты дали тебе точный ответ
-            </p>
-
-            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto space-y-6 px-4">
-              <div className="text-left">
-                <Label htmlFor="name" className="text-purple-200 mb-2 block">
-                  Твоё имя
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="bg-black/20 border-purple-800/50 text-white placeholder-purple-400 focus:border-golden-400"
-                  placeholder="Как тебя зовут?"
-                  required
-                />
-              </div>
-
-              <div className="text-left">
-                <Label htmlFor="age" className="text-purple-200 mb-2 block">
-                  Возраст
-                </Label>
-                <Input
-                  id="age"
-                  type="number"
-                  min="16"
-                  max="99"
-                  value={formData.age}
-                  onChange={(e) => setFormData({...formData, age: e.target.value})}
-                  className="bg-black/20 border-purple-800/50 text-white placeholder-purple-400 focus:border-golden-400"
-                  placeholder="Сколько тебе лет?"
-                  required
-                />
-              </div>
-
-              <div className="text-left">
-                <Label className="text-purple-200 mb-2 block">
-                  Тема расклада
-                </Label>
-                <Select onValueChange={(value) => setFormData({...formData, topic: value})}>
-                  <SelectTrigger className="bg-black/20 border-purple-800/50 text-white">
-                    <SelectValue placeholder="Выбери тему, которая тебя волнует" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-indigo-950 border-purple-800/50">
-                    {topics.map((topic) => {
-                      const Icon = topic.icon;
-                      return (
-                        <SelectItem 
-                          key={topic.value} 
-                          value={topic.value}
-                          className="text-white hover:bg-purple-800/30 cursor-pointer"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <Icon className="w-4 h-4 text-golden-400" />
-                            <span>{topic.label}</span>
-                          </div>
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button 
-                type="submit"
-                className="w-full bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                Продолжить к картам
-              </Button>
-            </form>
-          </div>
-        )}
-
-        {step === 'selection' && (
-          <div id="card-selection-section">
-            <CardSelection 
-              formData={formData}
-              onComplete={handleCardSelectionComplete}
-            />
-          </div>
-        )}
-
-        {step === 'payment' && (
-          <div id="payment-section" className="text-center px-4">
-            <h2 className="text-2xl md:text-3xl font-light text-golden-400 mb-8">
-              Почти готово!
-            </h2>
-            <div className="max-w-sm mx-auto bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-6 border border-golden-400/30">
-              <p className="text-purple-200 mb-6 text-sm md:text-base leading-relaxed">
-                Ваш Персональный расклад почти готов, пожалуйста, совершите оплату для продолжения, стоимость расклада: <span className="text-golden-400 text-lg font-medium">400 грн.</span>
+    <>
+      <section className="py-20 px-4 relative">
+        <div className="max-w-4xl mx-auto">
+          
+          {step === 'form' && (
+            <div id="personal-reading-form" className="text-center">
+              <h2 className="text-2xl md:text-4xl font-light text-golden-400 mb-8">
+                Персональный расклад
+              </h2>
+              <p className="text-lg md:text-xl text-purple-200 mb-12 px-4">
+                Расскажи немного о себе, чтобы карты дали тебе точный ответ
               </p>
-              <Button 
-                onClick={handleGetReading}
-                className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight"
-              >
-                Получить Персональный Расклад
-              </Button>
-              <p className="text-purple-400 text-xs mt-4">
-                Безопасная оплата • Моментальное получение результата
-              </p>
+
+              <form onSubmit={handleFormSubmit} className="max-w-md mx-auto space-y-6 px-4">
+                <div className="text-left">
+                  <Label htmlFor="name" className="text-purple-200 mb-2 block">
+                    Твоё имя
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="bg-black/20 border-purple-800/50 text-white placeholder-purple-400 focus:border-golden-400"
+                    placeholder="Как тебя зовут?"
+                    required
+                  />
+                </div>
+
+                <div className="text-left">
+                  <Label htmlFor="age" className="text-purple-200 mb-2 block">
+                    Возраст
+                  </Label>
+                  <Input
+                    id="age"
+                    type="number"
+                    min="16"
+                    max="99"
+                    value={formData.age}
+                    onChange={(e) => setFormData({...formData, age: e.target.value})}
+                    className="bg-black/20 border-purple-800/50 text-white placeholder-purple-400 focus:border-golden-400"
+                    placeholder="Сколько тебе лет?"
+                    required
+                  />
+                </div>
+
+                <div className="text-left">
+                  <Label className="text-purple-200 mb-2 block">
+                    Тема расклада
+                  </Label>
+                  <Select onValueChange={(value) => setFormData({...formData, topic: value})}>
+                    <SelectTrigger className="bg-black/20 border-purple-800/50 text-white">
+                      <SelectValue placeholder="Выбери тему, которая тебя волнует" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-indigo-950 border-purple-800/50">
+                      {topics.map((topic) => {
+                        const Icon = topic.icon;
+                        return (
+                          <SelectItem 
+                            key={topic.value} 
+                            value={topic.value}
+                            className="text-white hover:bg-purple-800/30 cursor-pointer"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <Icon className="w-4 h-4 text-golden-400" />
+                              <span>{topic.label}</span>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button 
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium text-lg py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  Продолжить к картам
+                </Button>
+              </form>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
+          )}
+
+          {step === 'selection' && (
+            <div id="card-selection-section">
+              <CardSelection 
+                formData={formData}
+                onComplete={handleCardSelectionComplete}
+              />
+            </div>
+          )}
+
+          {step === 'payment' && (
+            <div id="payment-section" className="text-center px-4">
+              <h2 className="text-2xl md:text-3xl font-light text-golden-400 mb-8">
+                Почти готово!
+              </h2>
+              <div className="max-w-sm mx-auto bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-sm rounded-2xl p-6 border border-golden-400/30">
+                <p className="text-purple-200 mb-6 text-sm md:text-base leading-relaxed">
+                  Ваш Персональный расклад почти готов, пожалуйста, совершите оплату для продолжения, стоимость расклада: <span className="text-golden-400 text-lg font-medium">400 грн.</span>
+                </p>
+                <Button 
+                  onClick={handleGetReading}
+                  className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight"
+                >
+                  Получить Персональный Расклад
+                </Button>
+                <p className="text-purple-400 text-xs mt-4">
+                  Безопасная оплата • Моментальное получение результата
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Reading Modal */}
+      <ReadingModal
+        isOpen={showReadingModal}
+        onClose={() => setShowReadingModal(false)}
+        formData={formData}
+        selectedCards={selectedCards}
+      />
+    </>
   );
 };
