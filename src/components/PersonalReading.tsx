@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -163,7 +162,7 @@ export const PersonalReading = () => {
                   onClick={handleGetReading}
                   className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium text-xs md:text-sm py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300 px-2 whitespace-normal leading-tight"
                 >
-                  Получить Персональный Расклад
+                  Оплатить сейчас
                 </Button>
                 <p className="text-purple-400 text-xs mt-4">
                   Безопасная оплата • Моментальное получение результата

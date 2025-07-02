@@ -54,11 +54,6 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
     onComplete(selectedCards);
   };
 
-  const resetSelection = () => {
-    setSelectedCards([]);
-    setIsComplete(false);
-  };
-
   return (
     <div className="text-center px-4">
       <h2 className="text-2xl md:text-3xl font-light text-golden-400 mb-4">
@@ -77,12 +72,12 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
               <div key={index} className="text-center">
                 <div className="w-20 h-30 md:w-24 md:h-36 mb-2">
                   <img
-                    src={card.image}
+                    src={card.imageUrl || card.image || 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'}
                     alt={card.name}
                     className="w-full h-full object-contain rounded-lg border-2 border-golden-400"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
+                      target.src = 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07';
                     }}
                   />
                 </div>
@@ -123,24 +118,15 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
         </p>
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Buttons - убрали кнопку "Выбрать другие карты" */}
       <div className="space-y-4">
         {isComplete ? (
-          <div className="space-y-4">
-            <Button
-              onClick={handleComplete}
-              className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
-            >
-              Продолжить с выбранными картами
-            </Button>
-            <Button
-              onClick={resetSelection}
-              variant="outline"
-              className="border-purple-600 text-purple-200 hover:bg-purple-800/30"
-            >
-              Выбрать другие карты
-            </Button>
-          </div>
+          <Button
+            onClick={handleComplete}
+            className="bg-gradient-to-r from-golden-600 to-golden-400 hover:from-golden-700 hover:to-golden-500 text-black font-medium px-8 py-3 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Продолжить с выбранными картами
+          </Button>
         ) : (
           <p className="text-purple-400 text-sm">
             Выбери еще {3 - selectedCards.length} {3 - selectedCards.length === 1 ? 'карту' : 'карты'}
