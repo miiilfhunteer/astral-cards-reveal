@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { tarotCards } from '@/data/tarotCards';
@@ -22,17 +21,32 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   useEffect(() => {
     const shuffled = [...tarotCards].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
+    console.log('CardSelection: Component mounted, shuffled cards:', shuffled.length);
   }, []);
 
   const handleCardClick = (card: any) => {
-    if (selectedCards.length < 3 && !selectedCards.some(c => c.id === card.id)) {
+    console.log('=== CARD CLICK DEBUG ===');
+    console.log('Clicked card:', card.name, 'ID:', card.id);
+    console.log('Current selectedCards before:', selectedCards.map(c => `${c.name}(${c.id})`));
+    console.log('Selected cards length:', selectedCards.length);
+    
+    const alreadySelected = selectedCards.some(c => c.id === card.id);
+    console.log('Is card already selected?', alreadySelected);
+    console.log('Can select more cards?', selectedCards.length < 3);
+    
+    if (selectedCards.length < 3 && !alreadySelected) {
       const updatedCards = [...selectedCards, card];
+      console.log('Adding card. New selection:', updatedCards.map(c => `${c.name}(${c.id})`));
       setSelectedCards(updatedCards);
       
       if (updatedCards.length === 3) {
+        console.log('3 cards selected, setting complete to true');
         setIsComplete(true);
       }
+    } else {
+      console.log('Cannot select card. Reason:', alreadySelected ? 'Already selected' : 'Max 3 cards reached');
     }
+    console.log('=== END CARD CLICK DEBUG ===');
   };
 
   const handleComplete = () => {
