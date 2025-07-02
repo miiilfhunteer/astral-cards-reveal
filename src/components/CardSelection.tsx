@@ -25,8 +25,12 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   }, []);
 
   const handleCardClick = (card: any) => {
+    console.log('Card clicked:', card.name);
+    console.log('Current selected cards:', selectedCards);
+    
     if (selectedCards.length < 3 && !selectedCards.find(c => c.id === card.id)) {
       const newSelected = [...selectedCards, card];
+      console.log('New selected cards:', newSelected);
       setSelectedCards(newSelected);
       
       if (newSelected.length === 3) {
