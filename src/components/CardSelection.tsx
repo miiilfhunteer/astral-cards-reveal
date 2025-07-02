@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { tarotCards } from '@/data/tarotCards';
@@ -26,17 +27,17 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
 
   const handleCardClick = (card: any) => {
     console.log('=== CARD CLICK DEBUG ===');
-    console.log('Clicked card:', card.name, 'ID:', card.id);
-    console.log('Current selectedCards before:', selectedCards.map(c => `${c.name}(${c.id})`));
+    console.log('Clicked card:', card.name);
+    console.log('Current selectedCards before:', selectedCards.map(c => c.name));
     console.log('Selected cards length:', selectedCards.length);
     
-    const alreadySelected = selectedCards.some(c => c.id === card.id);
+    const alreadySelected = selectedCards.some(c => c.name === card.name);
     console.log('Is card already selected?', alreadySelected);
     console.log('Can select more cards?', selectedCards.length < 3);
     
     if (selectedCards.length < 3 && !alreadySelected) {
       const updatedCards = [...selectedCards, card];
-      console.log('Adding card. New selection:', updatedCards.map(c => `${c.name}(${c.id})`));
+      console.log('Adding card. New selection:', updatedCards.map(c => c.name));
       setSelectedCards(updatedCards);
       
       if (updatedCards.length === 3) {
@@ -73,7 +74,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
           <h3 className="text-lg text-golden-400 mb-4">Твои карты:</h3>
           <div className="flex justify-center gap-4 flex-wrap">
             {selectedCards.map((card, index) => (
-              <div key={card.id} className="text-center">
+              <div key={index} className="text-center">
                 <div className="w-20 h-30 md:w-24 md:h-36 mb-2">
                   <img
                     src={card.image}
@@ -97,11 +98,11 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
       {/* Card Grid */}
       {!isComplete && (
         <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-4 mb-8 max-w-4xl mx-auto">
-          {shuffledCards.slice(0, 24).map((card) => (
+          {shuffledCards.slice(0, 24).map((card, index) => (
             <div
-              key={card.id}
+              key={index}
               className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
-                selectedCards.some(c => c.id === card.id) ? 'opacity-50' : ''
+                selectedCards.some(c => c.name === card.name) ? 'opacity-50' : ''
               }`}
               onClick={() => handleCardClick(card)}
             >
