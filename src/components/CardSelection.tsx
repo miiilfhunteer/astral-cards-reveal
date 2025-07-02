@@ -25,15 +25,11 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
   }, []);
 
   const handleCardClick = (card: any) => {
-    console.log('Card clicked:', card.name);
-    console.log('Current selected cards:', selectedCards);
-    
-    if (selectedCards.length < 3 && !selectedCards.find(c => c.id === card.id)) {
-      const newSelected = [...selectedCards, card];
-      console.log('New selected cards:', newSelected);
-      setSelectedCards(newSelected);
+    if (selectedCards.length < 3 && !selectedCards.some(c => c.id === card.id)) {
+      const updatedCards = [...selectedCards, card];
+      setSelectedCards(updatedCards);
       
-      if (newSelected.length === 3) {
+      if (updatedCards.length === 3) {
         setIsComplete(true);
       }
     }
@@ -91,7 +87,7 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
             <div
               key={card.id}
               className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
-                selectedCards.find(c => c.id === card.id) ? 'opacity-50' : ''
+                selectedCards.some(c => c.id === card.id) ? 'opacity-50' : ''
               }`}
               onClick={() => handleCardClick(card)}
             >
