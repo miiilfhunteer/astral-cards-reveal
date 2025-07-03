@@ -72,12 +72,12 @@ export const CardSelection: React.FC<CardSelectionProps> = ({ formData, onComple
               <div key={index} className="text-center">
                 <div className="w-20 h-30 md:w-24 md:h-36 mb-2">
                   <img
-                    src={card.imageUrl || card.image || 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'}
+                    src={card.image}
                     alt={card.name}
                     className="w-full h-full object-contain rounded-lg border-2 border-golden-400"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07';
+                      target.src = 'https://static.tildacdn.com/tild3835-6566-4939-b233-646265643261/card_back.jpg';
                     }}
                   />
                 </div>
